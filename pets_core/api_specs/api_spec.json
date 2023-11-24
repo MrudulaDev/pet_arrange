@@ -1,0 +1,895 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:8000",
+    "basePath": "/api/pets_core/",
+    "info": {
+        "version": "1.0.0",
+        "title": "Pet Arrange",
+        "description": "Connects Rescued Pets in Shelters with Prospective Adopters"
+    },
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "oauth": {
+            "tokenUrl": "http://auth.ibtspl.com/oauth2/",
+            "flow": "password",
+            "scopes": {
+                "read": "read users",
+                "write": "create users",
+                "update": "update users",
+                "delete": "delete users",
+                "superuser": "super user permission"
+            },
+            "type": "oauth2"
+        }
+    },
+    "definitions": {
+        "CommonHttpExceptionResponse": {
+            "type": "object",
+            "properties": {
+                "response": {
+                    "type": "string"
+                },
+                "http_status_code": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "response",
+                "http_status_code"
+            ]
+        },
+        "PetResponse": {
+          "type": "object",
+          "properties": {
+            "pet_id": {
+                "type": "integer",
+                "description": "Id of the pet"
+            },
+            "name": {
+                "type": "string",
+                "description": "The name of the pet"
+            },
+            "age": {
+                "type": "integer",
+                "description": "The age of the pet"
+            },
+            "pet_category": {
+                "type": "string",
+                "description": "what animal is the pet?",
+                "enum": [
+                    "DOG",
+                    "CAT",
+                    "PARROT",
+                    "RABBIT",
+                    "OTHERS"
+                ]
+            },
+            "size": {
+                "type": "string",
+                "description": "The size of the pet (e.g., small, medium, large)",
+                "enum": [
+                    "SMALL",
+                    "MEDIUM",
+                    "LARGE"
+                ]
+            },
+            "gender": {
+                "type": "string",
+                "description": "The gender of the pet",
+                "enum": [
+                  "MALE",
+                  "FEMALE"
+                ]
+            }
+          },
+          "required": [
+            "pet_id",
+            "name",
+            "age",
+            "pet_category",
+            "size",
+            "gender"
+          ]
+        }
+    },
+    "parameters": {
+        "UpdateShelterProfileRequest": {
+            "name": "ShelterProfile",
+            "in": "body",
+            "description": "Update Shelter Details",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "shelter_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "required":[
+                    "shelter_id",
+                    "name",
+                    "address",
+                    "phone_number",
+                    "email"
+                ]
+            }
+        },
+        "CreatePet": {
+            "name": "PetDetails",
+            "in": "body",
+            "description": "Details of the new pet",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "shelter_id":{
+                      "type": "integer",
+                      "description": "Id of the shelter"
+                    },
+                    "pet_id": {
+                      "type": "integer",
+                      "description": "Id of the pet"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the pet"
+                    },
+                    "age": {
+                        "type": "integer",
+                        "description": "The age of the pet"
+                    },
+                    "pet_category": {
+                        "type": "string",
+                        "description": "what animal is the pet?",
+                        "enum": [
+                            "DOG",
+                            "CAT",
+                            "PARROT",
+                            "RABBIT",
+                            "OTHERS"
+                        ]
+                    },
+                    "size": {
+                        "type": "string",
+                        "description": "The size of the pet (e.g., small, medium, large)",
+                        "enum": [
+                            "SMALL",
+                            "MEDIUM",
+                            "LARGE"
+                        ]
+                    },
+                    "gender": {
+                        "type": "string",
+                        "description": "The gender of the pet",
+                        "enum": [
+                          "MALE",
+                          "FEMALE"
+                        ]
+                    }
+                },
+                "required": [
+                    "shelter_id",
+                    "pet_id",
+                    "name",
+                    "pet_category",
+                    "size",
+                    "gender"
+                ]
+            }
+        },
+        "CreatePet2": {
+            "name": "PetDetails2",
+            "in": "body",
+            "description": "Details of the new pet without shelter id",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "pet_id":{
+                      "type": "integer",
+                      "description": "The id of the pet"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the pet"
+                    },
+                    "age": {
+                        "type": "integer",
+                        "description": "The age of the pet"
+                    },
+                    "pet_category": {
+                        "type": "string",
+                        "description": "what animal is the pet?",
+                        "enum": [
+                            "DOG",
+                            "CAT",
+                            "PARROT",
+                            "RABBIT",
+                            "OTHERS"
+                        ]
+                    },
+                    "size": {
+                        "type": "string",
+                        "description": "The size of the pet (e.g., small, medium, large)",
+                        "enum": [
+                            "SMALL",
+                            "MEDIUM",
+                            "LARGE"
+                        ]
+                    },
+                    "gender": {
+                        "type": "string",
+                        "description": "The gender of the pet",
+                        "enum": [
+                          "MALE",
+                          "FEMALE"
+                        ]
+                    }
+                },
+                "required": [
+                    "pet_id",
+                    "name",
+                    "pet_category",
+                    "size",
+                    "gender"
+                ]
+            }
+        },
+        "ShelterIdPathParam": {
+            "name": "shelter_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+        },
+        "PetIdPathParam": {
+            "name": "pet_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+        },
+        "UpdatePetDetails": {
+            "name": "PetDetails",
+            "in": "body",
+            "description": "Update Pet Details",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "pet_id": {
+                        "type": "integer",
+                        "description": "The id of the pet"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the pet"
+                    },
+                    "age": {
+                        "type": "integer",
+                        "description": "The age of the pet"
+                    },
+                    "pet_category": {
+                        "type": "string",
+                        "description": "what animal is the pet?",
+                        "enum": [
+                            "DOG",
+                            "CAT",
+                            "PARROT",
+                            "RABBIT",
+                            "OTHERS"
+                        ]
+                    },
+                    "size": {
+                        "type": "string",
+                        "description": "The size of the pet (e.g., small, medium, large)",
+                        "enum": [
+                          "SMALL",
+                          "MEDIUM",
+                          "LARGE"
+                        ]
+                    },
+                    "gender": {
+                        "type": "string",
+                        "description": "The gender of the pet",
+                        "enum": [
+                          "MALE",
+                          "FEMALE"
+                        ]
+                    }
+                },
+                "required": [
+                    "pet_id",
+                    "name",
+                    "pet_category",
+                    "size",
+                    "gender"
+                ]
+            }
+        },
+        "PetCategoryQueryParameter": {
+          "name": "type",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "enum": [
+            "DOG",
+            "CAT",
+            "PARROT",
+            "RABBIT",
+            "OTHERS"
+          ]
+        },
+        "SizeQueryParameter": {
+          "name": "size",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "enum": [
+            "SMALL",
+            "MEDIUM",
+            "LARGE"
+          ]
+        },
+        "GenderQueryParameter": {
+          "name": "gender",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "enum": [
+            "MALE",
+            "FEMALE"
+          ]
+        }
+    },
+    "responses":{
+      "UpdateShelterProfileValidResponse": {
+        "description": "Updated Successfully",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "shelter_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "shelter_id",
+                "name",
+                "address",
+                "phone_number",
+                "email"
+            ]
+        }
+      },
+      "UpdateShelterProfileBadRequestResponse": {
+        "description": "Update Profile Bad Request Response",
+        "schema": {
+          "allOf": [
+          {
+            "$ref": "#/definitions/CommonHttpExceptionResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "res_status": {
+                "type": "string",
+                "enum": [
+                  "NAME_ALREADY_IN_USE",
+                  "INVALID_ADDRESS",
+                  "INVALID_PHONE_NUMBER",
+                  "INVALID_EMAIL",
+                  "EMAIL_ALREADY_IN_USE"
+                ]
+              }
+            },
+            "required": [
+              "res_status"
+            ]
+          }
+        ]
+        }
+      },
+      "ShelterNotFoundResponse": {
+        "description": "Shelter Not Found",
+        "schema": {
+          "allOf": [
+          {
+            "$ref": "#/definitions/CommonHttpExceptionResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "res_status": {
+                "type": "string",
+                "enum": [
+                  "INVALID_SHELTER_ID"
+                ]
+              }
+            },
+            "required": [
+              "res_status"
+            ]
+          }
+        ]
+        }
+      },
+      "PetNotFoundResponse": {
+        "description": "Pet Not Found",
+        "schema": {
+          "allOf": [
+          {
+            "$ref": "#/definitions/CommonHttpExceptionResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "res_status": {
+                "type": "string",
+                "enum": [
+                  "INVALID_PET_ID"
+                ]
+              }
+            },
+            "required": [
+              "res_status"
+            ]
+          }
+        ]
+        }
+      },
+      "CreatePetValidResponse": {
+        "description": "Created Successfully",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "pet_id": {
+                    "type": "integer"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of the pet"
+                },
+                "age": {
+                  "type": "integer",
+                  "description": "The age of the pet"
+                },
+                "pet_category": {
+                  "type": "string",
+                  "description": "what animal is the pet?",
+                  "enum": [
+                      "DOG",
+                      "CAT",
+                      "PARROT",
+                      "RABBIT",
+                      "OTHERS"
+                  ]
+                },
+                "size": {
+                  "type": "string",
+                  "description": "The size of the pet (e.g., small, medium, large)",
+                  "enum": [
+                      "SMALL",
+                      "MEDIUM",
+                      "LARGE"
+                  ]
+                },
+                "gender": {
+                  "type": "string",
+                  "description": "The gender of the pet",
+                  "enum": [
+                    "MALE",
+                    "FEMALE"
+                  ]
+                }
+            },
+            "required": [
+              "pet_id",
+              "name",
+              "pet_category",
+              "size",
+              "gender"
+            ]
+        }
+      },
+      "UnauthorizedShelterResponse": {
+        "description": "Unauthorized",
+        "schema": {
+          "allOf": [
+          {
+            "$ref": "#/definitions/CommonHttpExceptionResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "res_status": {
+                "type": "string",
+                "enum": [
+                  "WRONG_SHELTER_ID"
+                ]
+              }
+            },
+            "required": [
+              "res_status"
+            ]
+          }
+        ]
+        }
+      },
+      "CreatePetBadRequestResponse": {
+        "description": "Create Pet Bad Request Response",
+        "schema": {
+          "allOf": [
+          {
+            "$ref": "#/definitions/CommonHttpExceptionResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "res_status": {
+                "type": "string",
+                "enum": [
+                  "INVALID_SHELTER_ID",
+                  "PET_ID_ALREADY_EXISTS",
+                  "INVALID_AGE"
+                ]
+              }
+            },
+            "required": [
+              "res_status"
+            ]
+          }
+        ]
+        }
+      },
+      "PetsListValidResponse": {
+        "description": "Successfully Retrieved",
+        "schema": {
+            "type": "object",
+            "properties": {
+              "all_pets": {
+                "type": "array",
+                "items": {
+                   "$ref": "#/definitions/PetResponse"
+                }
+             }
+           }
+        }
+      },
+      "UpdatePetValidResponse": {
+        "description": "Updated Successfully",
+        "schema": {
+            "type": "object",
+            "properties": {
+              "pet_id": {
+                  "type": "integer",
+                  "description": "The id of the pet"
+              },
+              "name": {
+                  "type": "string",
+                  "description": "The name of the pet"
+              },
+              "age": {
+                  "type": "integer",
+                  "description": "The age of the pet"
+              },
+              "pet_category": {
+                  "type": "string",
+                  "description": "what animal is the pet?",
+                  "enum": [
+                      "DOG",
+                      "CAT",
+                      "PARROT",
+                      "RABBIT",
+                      "OTHERS"
+                  ]
+              },
+              "size": {
+                  "type": "string",
+                  "description": "The size of the pet (e.g., small, medium, large)",
+                  "enum": [
+                      "SMALL",
+                      "MEDIUM",
+                      "LARGE"
+                  ]
+              },
+              "gender": {
+                  "type": "string",
+                  "description": "The gender of the pet",
+                  "enum": [
+                    "MALE",
+                    "FEMALE"
+                  ]
+              }
+          },
+          "required": [
+              "pet_id",
+              "name",
+              "pet_category",
+              "size",
+              "gender"
+          ]
+        }
+      },
+      "UpdatePetBadRequestResponse": {
+        "description": "Update Pet Bad Request Response",
+        "schema": {
+          "allOf": [
+          {
+            "$ref": "#/definitions/CommonHttpExceptionResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "res_status": {
+                "type": "string",
+                "enum": [
+                  "WRONG_PET_ID",
+                  "NAME_ALREADY_IN_USE",
+                  "INVALID_AGE"
+                ]
+              }
+            },
+            "required": [
+              "res_status"
+            ]
+          }
+        ]
+        }
+      }
+    },
+    "paths": {
+        "/shelter/profile/v1/": {
+            "put": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Update Shelter Profile",
+                "operationId": "update_profile",
+                "description": "Update Profile Information for a Shelter",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/UpdateShelterProfileRequest"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                      "$ref": "#/responses/UpdateShelterProfileValidResponse"
+                    },
+                    "400": {
+                      "$ref": "#/responses/UpdateShelterProfileBadRequestResponse"
+                    },
+                    "404": {
+                      "$ref": "#/responses/ShelterNotFoundResponse"
+                    }
+                }
+            }
+        },
+        "/pet/v1/": {
+            "post": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Create Pet",
+                "operationId": "create_pet",
+                "description": "Create a new pet for a specific shelter",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/CreatePet"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                      "$ref": "#/responses/CreatePetValidResponse"
+                    },
+                    "401": {
+                      "$ref": "#/responses/UnauthorizedShelterResponse"
+                    },
+                    "400": {
+                      "$ref": "#/responses/CreatePetBadRequestResponse"
+                    }
+                }
+            }
+        },
+        "/shelter/{shelter_id}/pets/v1/": {
+            "get": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Get All Pets in a Shelter",
+                "operationId": "get_all_pets",
+                "description": "Retrieve a list of all pets in a particular shelter",
+                "parameters": [
+                  {
+                        "$ref": "#/parameters/ShelterIdPathParam"
+                  }
+                ],
+                "responses": {
+                    "200": {
+                      "$ref": "#/responses/PetsListValidResponse"
+                    },
+                    "401": {
+                      "$ref": "#/responses/UnauthorizedShelterResponse"
+                    },
+                    "404":{
+                      "$ref": "#/responses/ShelterNotFoundResponse"
+                    }
+                }
+            }
+        },
+        "/pet/{pet_id}/v1/": {
+            "delete": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Delete Pet",
+                "operationId": "delete_pet",
+                "description": "Delete a specific pet in a shelter",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/PetIdPathParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                      "description": "Deleted Successfully",
+                      "schema":{
+                        "type": "object",
+                        "properties": {
+                          "pet_id": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "401": {
+                      "$ref": "#/responses/UnauthorizedShelterResponse"
+                    },
+                    "404": {
+                        "$ref": "#/responses/PetNotFoundResponse"
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Get Pet",
+                "operationId": "get_pet",
+                "description": "Retrieve details of a specific pet in a shelter",
+                "parameters": [
+                  {
+                    "$ref": "#/parameters/PetIdPathParam"
+                  }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Response",
+                        "schema": {
+                          "$ref": "#/definitions/PetResponse"
+                        }
+                    },
+                    "401": {
+                      "$ref": "#/responses/UnauthorizedShelterResponse"
+                    },
+                    "404": {
+                        "$ref": "#/responses/PetNotFoundResponse"
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Update Pet",
+                "operationId": "update_pet",
+                "description": "Update details of a specific pet in a shelter",
+                "parameters": [
+                    {
+                      "$ref": "#/parameters/PetIdPathParam"
+                    },
+                    {
+                      "$ref": "#/parameters/UpdatePetDetails"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                      "$ref": "#/responses/UpdatePetValidResponse"
+                    },
+                    "400": {
+                        "$ref": "#/responses/UpdatePetBadRequestResponse"
+                    },
+                    "404": {
+                        "$ref": "#/responses/PetNotFoundResponse"
+                    }
+                }
+            }
+        },
+        "/shelter/{shelter_id}/filtered_pets/v1/": {
+            "get": {
+                "security": [
+                    {
+                        "oauth": [
+                            "superuser"
+                        ]
+                    }
+                ],
+                "summary": "Get Filtered Pets in a Shelter",
+                "operationId": "shelter_filtered_pets",
+                "description": "Retrieve filtered listings of pets in a particular shelter",
+                "parameters": [
+                    {
+                      "$ref": "#/parameters/ShelterIdPathParam"
+                    },
+                    {
+                    "$ref": "#/parameters/PetCategoryQueryParameter"
+                    },
+                    {
+                    "$ref": "#/parameters/SizeQueryParameter"
+                    },
+                    {
+                    "$ref": "#/parameters/GenderQueryParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                      "$ref": "#/responses/PetsListValidResponse"
+                    },
+                    "401": {
+                      "$ref": "#/responses/UnauthorizedShelterResponse"
+                    }
+                }
+            }
+        }
+    }
+}

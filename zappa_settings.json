@@ -1,0 +1,145 @@
+{
+  "alpha": {
+    "project_name": "pet-store",
+    "s3_bucket": "ibuild-backend-common-code-bucket",
+    "memory_size": 1536,
+    "api_name": "pet-store",
+    "timeout_seconds": 300,
+    "aws_region": "ap-south-1",
+    "keep_warm": false,
+    "domain": "pet-store-alpha.apigateway.in",
+    "certificate_arn": "arn:aws:acm:us-east-1:607092105028:certificate/163b7c28-92eb-49bd-a60d-5094769276be",
+    "django_settings": "pet_store.settings.alpha",
+    "cloudwatch_log_level": "INFO",
+    "cloudwatch_data_trace": true,
+    "cloudwatch_metrics_enabled": true,
+    "touch": false,
+    "exception_handler": "ib_sentry_wrapper.utils.zappa_sentry.capture_exceptions",
+    "runtime": "python3.7",
+    "manage_roles": true,
+    "vpc_config": {
+      "SubnetIds": [
+        "subnet-89f666c4",
+        "subnet-69f76724"
+      ],
+      "SecurityGroupIds": [
+        "sg-7071bb18"
+      ]
+    }
+  },
+  "beta": {
+    "project_name": "pet-store",
+    "s3_bucket": "ibuild-backend-common-code-bucket",
+    "memory_size": 1536,
+    "api_name": "pet-store",
+    "timeout_seconds": 300,
+    "aws_region": "ap-south-1",
+    "keep_warm": false,
+    "domain": "pet-store-beta.apigateway.in",
+    "certificate_arn": "arn:aws:acm:us-east-1:607092105028:certificate/163b7c28-92eb-49bd-a60d-5094769276be",
+    "django_settings": "pet_store.settings.beta",
+    "cloudwatch_log_level": "INFO",
+    "cloudwatch_data_trace": true,
+    "cloudwatch_metrics_enabled": true,
+    "touch": false,
+    "exception_handler": "ib_sentry_wrapper.utils.zappa_sentry.capture_exceptions",
+    "runtime": "python3.7",
+    "manage_roles": true,
+    "vpc_config": {
+      "SubnetIds": [
+        "subnet-89f666c4",
+        "subnet-69f76724"
+      ],
+      "SecurityGroupIds": [
+        "sg-7071bb18"
+      ]
+    }
+  },
+  "gamma": {
+    "project_name": "pet-store",
+    "s3_bucket": "ibuild-backend-common-code-bucket",
+    "memory_size": 1536,
+    "api_name": "pet-store",
+    "timeout_seconds": 300,
+    "aws_region": "ap-south-1",
+    "keep_warm": false,
+    "django_settings": "pet_store.settings.gamma",
+    "domain": "pet-store-gamma.apigateway.in",
+    "certificate_arn": "arn:aws:acm:us-east-1:607092105028:certificate/163b7c28-92eb-49bd-a60d-5094769276be",
+    "log_level": "INFO",
+    "cloudwatch_log_level": "INFO",
+    "cloudwatch_data_trace": true,
+    "cloudwatch_metrics_enabled": true,
+    "touch": false,
+    "exception_handler": "ib_sentry_wrapper.utils.zappa_sentry.capture_exceptions",
+    "runtime": "python3.7",
+    "manage_roles": true,
+    "vpc_config": {
+      "SubnetIds": [
+        "subnet-89f666c4",
+        "subnet-69f76724"
+      ],
+      "SecurityGroupIds": [
+        "sg-7071bb18"
+      ]
+    }
+  },
+  "staging": {
+    "project_name": "pet-store",
+    "s3_bucket": "ibuild-backend-common-code-bucket",
+    "memory_size": 1536,
+    "api_name": "pet-store",
+    "timeout_seconds": 300,
+    "aws_region": "ap-south-1",
+    "keep_warm": false,
+    "django_settings": "pet_store.settings.staging",
+    "domain": "pet-store-staging.apigateway.in",
+    "certificate_arn": "arn:aws:acm:us-east-1:607092105028:certificate/163b7c28-92eb-49bd-a60d-5094769276be",
+    "log_level": "INFO",
+    "cloudwatch_log_level": "INFO",
+    "cloudwatch_data_trace": true,
+    "cloudwatch_metrics_enabled": true,
+    "touch": false,
+    "exception_handler": "ib_sentry_wrapper.utils.zappa_sentry.capture_exceptions",
+    "runtime": "python3.7",
+    "manage_roles": true,
+    "vpc_config": {
+      "SubnetIds": [
+        "subnet-89f666c4",
+        "subnet-69f76724"
+      ],
+      "SecurityGroupIds": [
+        "sg-7071bb18"
+      ]
+    }
+  },
+  "prod": {
+    "project_name": "pet-store",
+    "s3_bucket": "ibuild-backend-common-code-bucket",
+    "memory_size": 1536,
+    "api_name": "pet-store",
+    "timeout_seconds": 300,
+    "aws_region": "ap-south-1",
+    "keep_warm": false,
+    "django_settings": "pet_store.settings.prod",
+    "domain": "pet-store-prod.apigateway.in",
+    "certificate_arn": "arn:aws:acm:us-east-1:607092105028:certificate/163b7c28-92eb-49bd-a60d-5094769276be",
+    "log_level": "INFO",
+    "cloudwatch_log_level": "INFO",
+    "cloudwatch_data_trace": true,
+    "cloudwatch_metrics_enabled": true,
+    "touch": false,
+    "exception_handler": "ib_sentry_wrapper.utils.zappa_sentry.capture_exceptions",
+    "runtime": "python3.7",
+    "manage_roles": true,
+    "vpc_config": {
+      "SubnetIds": [
+        "subnet-89f666c4",
+        "subnet-69f76724"
+      ],
+      "SecurityGroupIds": [
+        "sg-7071bb18"
+      ]
+    }
+  }
+}
