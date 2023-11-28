@@ -9,7 +9,7 @@ from pets_core.interactors.get_pet_interactor import GetPetInteractor
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
     user_id = kwargs['user']
-    pet_id = kwargs['pet_id']
+    pet_id = int(kwargs['pet_id'])
     storage = StorageImplementation()
     presenter = PresenterImplementation()
     interactor = GetPetInteractor(storage=storage)

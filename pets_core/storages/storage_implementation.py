@@ -48,13 +48,13 @@ class StorageImplementation(StorageInterface):
         pets_list = list(Pet.objects.filter(shelter_id=shelter_id))
         if pet_category != None:
             filtered_pets_list = list(Pet.objects.filter(pet_category=pet_category))
-            pets_list = pets_list and filtered_pets_list
+            pets_list = [pet for pet in pets_list if pet in filtered_pets_list]
         if gender != None:
             filtered_pets_list = list(Pet.objects.filter(gender=gender))
-            pets_list = pets_list and filtered_pets_list
+            pets_list = [pet for pet in pets_list if pet in filtered_pets_list]
         if size != None:
             filtered_pets_list = list(Pet.objects.filter(size=size))
-            pets_list = pets_list and filtered_pets_list
+            pets_list = [pet for pet in pets_list if pet in filtered_pets_list]
         pets_list_dto = self._convert_pet_objects_to_dto(pets_list=pets_list)
         return pets_list_dto
 

@@ -6,7 +6,7 @@ from typing import List
 class StorageInterface:
 
     @abstractmethod
-    def get_pet(self, pet_id: str) -> PetDetailsDTO:
+    def get_pet(self, pet_id: int) -> PetDetailsDTO:
         pass
 
     @abstractmethod

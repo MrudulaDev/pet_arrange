@@ -1,4 +1,4 @@
-from pets_core.interactors.presenter_interfaces.get_pet_presenter_interface import GetPetPresenterInterface
+from pets_core.interactors.presenter_interfaces.create_pet_presenter_interface import CreatePetPresenterInterface
 from pets_core.interactors.storage_interfaces.storage_interface import StorageInterface
 from pets_core.exceptions.custom_exceptions import WrongShelterId, PetIdAlreadyExists, InvalidAge
 from django.http import HttpResponse
@@ -12,7 +12,7 @@ class CreatePetInteractor:
 
     def create_pet_wrapper(self, user_id: str, shelter_id: int, pet_id: int, name: str, age: int, pet_category: str,
                            gender: str,
-                           size: str, presenter: GetPetPresenterInterface) -> HttpResponse:
+                           size: str, presenter: CreatePetPresenterInterface) -> HttpResponse:
         try:
             pet_details_dto = self.create_pet(user_id=user_id, pet_id=pet_id, shelter_id=shelter_id, name=name, age=age,
                                               pet_category=pet_category, gender=gender, size=size)

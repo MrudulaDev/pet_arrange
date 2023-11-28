@@ -10,7 +10,7 @@ class GetPetInteractor:
     def __init__(self, storage: StorageInterface):
         self.storage = storage
 
-    def get_pet_wrapper(self, user_id: str, pet_id: str, presenter: GetPetPresenterInterface) -> HttpResponse:
+    def get_pet_wrapper(self, user_id: str, pet_id: int, presenter: GetPetPresenterInterface) -> HttpResponse:
         try:
             pet_details_dto = self.get_pet(pet_id=pet_id, user_id=user_id)
         except InvalidPetId:
@@ -20,9 +20,9 @@ class GetPetInteractor:
         return presenter.get_response_for_get_pet(
             pet_details_dto=pet_details_dto)
 
-    def get_pet(self, user_id: str, pet_id: str) -> PetDetailsDTO:
+    def get_pet(self, user_id: str, pet_id: int) -> PetDetailsDTO:
         self.storage.validate_pet_id(pet_id=pet_id)
-        self.storage.validate_shelter_id(pet_id=pet_id,user_id=user_id)
+        self.storage.validate_shelter_id(pet_id=pet_id, user_id=user_id)
         pet_details_dto = \
             self.storage.get_pet(pet_id=pet_id)
         return pet_details_dto
