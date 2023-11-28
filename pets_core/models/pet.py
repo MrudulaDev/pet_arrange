@@ -25,8 +25,8 @@ class Pet(models.Model):
         (PetStatus.AVAILABLE.value, PetStatus.AVAILABLE.value),
         (PetStatus.ADOPTED.value, PetStatus.ADOPTED.value)
     )
-    pet_id = models.IntegerField()
-    name = models.CharField(max_length=50)
+    pet_id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
     age = models.IntegerField()
     pet_category = models.CharField(max_length=20, choices=PetCategory_Choice, default=None, null=True)
     size = models.CharField(max_length=20, choices=PetSize_Choice, default=None, null=True)

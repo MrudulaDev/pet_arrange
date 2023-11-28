@@ -36,7 +36,7 @@ RESPONSE_400_JSON = """
 {
     "response": "string",
     "http_status_code": 1,
-    "res_status": "INVALID_SHELTER_ID"
+    "res_status": "PET_ID_ALREADY_EXISTS"
 }
 """
 

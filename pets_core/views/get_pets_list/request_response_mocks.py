@@ -24,3 +24,11 @@ RESPONSE_401_JSON = """
 }
 """
 
+RESPONSE_404_JSON = """
+{
+    "response": "string",
+    "http_status_code": 1,
+    "res_status": "SHELTER_NOT_FOUND"
+}
+"""
+

@@ -8,14 +8,14 @@ from pets_core.interactors.create_pet_interactor import CreatePetInteractor
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
-    user_id = kwargs['user']
-    shelter_id = kwargs['shelter_id']
-    pet_id = kwargs['pet_id']
-    name = kwargs['name']
-    age = kwargs['age']
-    pet_category = kwargs['pet_category']
-    size = kwargs['size']
-    gender = kwargs['gender']
+    user_id = str(kwargs['user'])
+    shelter_id = kwargs['request_data']['shelter_id']
+    pet_id = kwargs['request_data']['pet_id']
+    name = kwargs['request_data']['name']
+    age = kwargs['request_data']['age']
+    pet_category = kwargs['request_data']['pet_category']
+    size = kwargs['request_data']['size']
+    gender = kwargs['request_data']['gender']
     storage = StorageImplementation()
     presenter = PresenterImplementation()
     interactor = CreatePetInteractor(storage=storage)

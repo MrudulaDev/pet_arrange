@@ -272,10 +272,6 @@
             "schema": {
                 "type": "object",
                 "properties": {
-                    "pet_id": {
-                        "type": "integer",
-                        "description": "The id of the pet"
-                    },
                     "name": {
                         "type": "string",
                         "description": "The name of the pet"
@@ -314,7 +310,6 @@
                     }
                 },
                 "required": [
-                    "pet_id",
                     "name",
                     "pet_category",
                     "size",
@@ -323,7 +318,7 @@
             }
         },
         "PetCategoryQueryParameter": {
-          "name": "type",
+          "name": "pet_category",
           "in": "query",
           "required": false,
           "type": "string",
@@ -429,7 +424,7 @@
               "res_status": {
                 "type": "string",
                 "enum": [
-                  "INVALID_SHELTER_ID"
+                  "SHELTER_NOT_FOUND"
                 ]
               }
             },
@@ -555,7 +550,6 @@
               "res_status": {
                 "type": "string",
                 "enum": [
-                  "INVALID_SHELTER_ID",
                   "PET_ID_ALREADY_EXISTS",
                   "INVALID_AGE"
                 ]
@@ -650,7 +644,7 @@
               "res_status": {
                 "type": "string",
                 "enum": [
-                  "WRONG_PET_ID",
+                  "PET_NOT_FOUND_IN_SHELTER",
                   "NAME_ALREADY_IN_USE",
                   "INVALID_AGE"
                 ]
@@ -721,36 +715,6 @@
                     },
                     "400": {
                       "$ref": "#/responses/CreatePetBadRequestResponse"
-                    }
-                }
-            }
-        },
-        "/shelter/{shelter_id}/pets/v1/": {
-            "get": {
-                "security": [
-                    {
-                        "oauth": [
-                            "superuser"
-                        ]
-                    }
-                ],
-                "summary": "Get All Pets in a Shelter",
-                "operationId": "get_all_pets",
-                "description": "Retrieve a list of all pets in a particular shelter",
-                "parameters": [
-                  {
-                        "$ref": "#/parameters/ShelterIdPathParam"
-                  }
-                ],
-                "responses": {
-                    "200": {
-                      "$ref": "#/responses/PetsListValidResponse"
-                    },
-                    "401": {
-                      "$ref": "#/responses/UnauthorizedShelterResponse"
-                    },
-                    "404":{
-                      "$ref": "#/responses/ShelterNotFoundResponse"
                     }
                 }
             }
@@ -848,14 +812,11 @@
                     },
                     "400": {
                         "$ref": "#/responses/UpdatePetBadRequestResponse"
-                    },
-                    "404": {
-                        "$ref": "#/responses/PetNotFoundResponse"
                     }
                 }
             }
         },
-        "/shelter/{shelter_id}/filtered_pets/v1/": {
+        "/shelter/{shelter_id}/pets/v1/": {
             "get": {
                 "security": [
                     {
@@ -864,9 +825,9 @@
                         ]
                     }
                 ],
-                "summary": "Get Filtered Pets in a Shelter",
-                "operationId": "shelter_filtered_pets",
-                "description": "Retrieve filtered listings of pets in a particular shelter",
+                "summary": "Get Pets in a Shelter with(out) filters",
+                "operationId": "get_pets_list",
+                "description": "Retrieve (un)filtered listings of pets in a particular shelter",
                 "parameters": [
                     {
                       "$ref": "#/parameters/ShelterIdPathParam"
@@ -887,6 +848,9 @@
                     },
                     "401": {
                       "$ref": "#/responses/UnauthorizedShelterResponse"
+                    },
+                    "404":{
+                      "$ref": "#/responses/ShelterNotFoundResponse"
                     }
                 }
             }

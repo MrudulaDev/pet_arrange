@@ -1,5 +1,5 @@
 from functools import reduce
-def get_all_pets(*args, **kwargs):  # pylint: disable=invalid-name
+def get_pets_list(*args, **kwargs):  # pylint: disable=invalid-name
     """
     Note: replace below mock implementation with your actual implementation
 

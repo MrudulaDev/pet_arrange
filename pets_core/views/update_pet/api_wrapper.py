@@ -1,48 +1,23 @@
 from django_swagger_utils.drf_server.utils.decorator.interface_decorator \
     import validate_decorator
 from .validator_class import ValidatorClass
+from pets_core.storages.storage_implementation import StorageImplementation
+from pets_core.presenters.update_pet_presenter_implementation import PresenterImplementation
+from pets_core.interactors.update_pet_interactor import UpdatePetInteractor
 
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
-    # ---------MOCK IMPLEMENTATION---------
-
-    try:
-        from pets_core.views.update_pet.request_response_mocks \
-            import REQUEST_BODY_JSON
-        body = REQUEST_BODY_JSON
-    except ImportError:
-        body = {}
-
-    test_case = {
-        "path_params": {'pet_id': 467},
-        "query_params": {},
-        "header_params": {},
-        "body": body,
-        "securities": [{'oauth': ['superuser']}]
-    }
-
-    from django_swagger_utils.drf_server.utils.server_gen.mock_response \
-        import mock_response
-    try:
-        response = ''
-        status_code = 200
-        if '200' in ['200', '400', '404']:
-            from pets_core.views.update_pet.request_response_mocks \
-                import RESPONSE_200_JSON
-            response = RESPONSE_200_JSON
-            status_code = 200
-        elif '201' in ['200', '400', '404']:
-            from pets_core.views.update_pet.request_response_mocks \
-                import RESPONSE_201_JSON
-            response = RESPONSE_201_JSON
-            status_code = 201
-    except ImportError:
-        response = ''
-        status_code = 200
-    response_tuple = mock_response(
-        app_name="pets_core", test_case=test_case,
-        operation_name="update_pet",
-        kwargs=kwargs, default_response_body=response,
-        group_name="", status_code=status_code)
-    return response_tuple
+    user_id = str(kwargs['user'])
+    pet_id = kwargs['pet_id']
+    name = kwargs['request_data']['name']
+    age = kwargs['request_data']['age']
+    pet_category = kwargs['request_data']['pet_category']
+    size = kwargs['request_data']['size']
+    gender = kwargs['request_data']['gender']
+    storage = StorageImplementation()
+    presenter = PresenterImplementation()
+    interactor = UpdatePetInteractor(storage=storage)
+    result = interactor.update_pet_wrapper(user_id=user_id, pet_id=pet_id, name=name, age=age,
+                                           pet_category=pet_category, size=size, gender=gender, presenter=presenter)
+    return result

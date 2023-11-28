@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Shelter(models.Model):
-    shelter_id = models.IntegerField()
+    shelter_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     user_id = models.CharField(max_length=255)
     address = models.CharField(max_length=200)

@@ -1,4 +1,4 @@
-from pets_core.interactors.presenter_interfaces.presenter_interface import PresenterInterface
+from pets_core.interactors.presenter_interfaces.get_pet_presenter_interface import GetPetPresenterInterface
 from pets_core.interactors.storage_interfaces.storage_interface import StorageInterface
 from pets_core.exceptions.custom_exceptions import InvalidPetId, WrongShelterId
 from django.http import HttpResponse
@@ -10,7 +10,7 @@ class GetPetInteractor:
     def __init__(self, storage: StorageInterface):
         self.storage = storage
 
-    def get_pet_wrapper(self, user_id: str, pet_id: str, presenter: PresenterInterface) -> HttpResponse:
+    def get_pet_wrapper(self, user_id: str, pet_id: str, presenter: GetPetPresenterInterface) -> HttpResponse:
         try:
             pet_details_dto = self.get_pet(pet_id=pet_id, user_id=user_id)
         except InvalidPetId:

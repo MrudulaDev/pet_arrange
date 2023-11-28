@@ -1,4 +1,4 @@
-from pets_core.interactors.presenter_interfaces.presenter_interface import PresenterInterface
+from pets_core.interactors.presenter_interfaces.delete_pet_presenter_interface import DeletePetPresenterInterface
 from pets_core.interactors.storage_interfaces.storage_interface import StorageInterface
 from pets_core.exceptions.custom_exceptions import InvalidPetId, WrongShelterId
 from django.http import HttpResponse
@@ -10,7 +10,7 @@ class DeletePetInteractor:
     def __init__(self, storage: StorageInterface):
         self.storage = storage
 
-    def delete_pet_wrapper(self, user_id: str, pet_id: int, presenter: PresenterInterface) -> HttpResponse:
+    def delete_pet_wrapper(self, user_id: str, pet_id: int, presenter: DeletePetPresenterInterface) -> HttpResponse:
         try:
             pet_id_dto = self.delete_pet(pet_id=pet_id, user_id=user_id)
         except InvalidPetId:

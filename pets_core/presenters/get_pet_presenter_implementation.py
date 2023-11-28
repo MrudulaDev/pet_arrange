@@ -1,13 +1,13 @@
-from typing import List, Dict
+from typing import Dict
 from pets_core.constants.exception_messages import INVALID_PET_ID, WRONG_SHELTER_ID
 from django_swagger_utils.utils.http_response_mixin import HTTPResponseMixin
-from pets_core.interactors.presenter_interfaces.presenter_interface import PresenterInterface
+from pets_core.interactors.presenter_interfaces.get_pet_presenter_interface import GetPetPresenterInterface
 from pets_core.interactors.storage_interfaces.storage_interface import PetDetailsDTO
 from pets_core.constants.enums import StatusCode
 from django.http import HttpResponse
 
 
-class PresenterImplementation(PresenterInterface, HTTPResponseMixin):
+class PresenterImplementation(GetPetPresenterInterface, HTTPResponseMixin):
 
     def get_response_for_get_pet(self, pet_details_dto: PetDetailsDTO) -> HttpResponse:
         pet_details_dict = self._get_pet_details(pet_details_dto)

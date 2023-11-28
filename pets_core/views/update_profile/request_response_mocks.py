@@ -33,7 +33,7 @@ RESPONSE_404_JSON = """
 {
     "response": "string",
     "http_status_code": 1,
-    "res_status": "INVALID_SHELTER_ID"
+    "res_status": "SHELTER_NOT_FOUND"
 }
 """
 

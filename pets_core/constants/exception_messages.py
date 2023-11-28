@@ -1,5 +1,7 @@
 WRONG_SHELTER_ID = ('This shelter ID is invalid', 'WRONG_SHELTER_ID')
 INVALID_PET_ID = ('Pet Does not exist', 'INVALID_PET_ID')
 PET_ID_ALREADY_EXISTS = ('Pet Id already exists', 'PET_ID_ALREADY_EXISTS')
-
-
+INVALID_AGE = ('Given Age is Invalid', 'INVALID_AGE')
+SHELTER_NOT_FOUND = ('Shelter Not Found', 'SHELTER_NOT_FOUND')
+PET_NOT_FOUND_IN_SHELTER = ('Pet Not Found in this Shelter', 'PET_NOT_FOUND_IN_SHELTER')
+NAME_ALREADY_IN_USE = ('Name is already in use', 'NAME_ALREADY_IN_USE')
