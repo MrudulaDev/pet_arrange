@@ -2,7 +2,7 @@ from abc import abstractmethod
 from pets_core.interactors.storage_interfaces.storage_interface import PetIdDTO
 from django.http import HttpResponse
 
-
+# todo: should inherit abc.ABC class to interface
 class DeletePetPresenterInterface:
     @abstractmethod
     def get_response_for_delete_pet(self, pet_id_dto: PetIdDTO) -> HttpResponse:

@@ -9,6 +9,8 @@ from pets_core.interactors.create_pet_interactor import CreatePetInteractor
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
     user_id = str(kwargs['user'])
+
+    # todo: instead of accessing `request_data` key multiple times, we can use a variable
     shelter_id = kwargs['request_data']['shelter_id']
     pet_id = kwargs['request_data']['pet_id']
     name = kwargs['request_data']['name']

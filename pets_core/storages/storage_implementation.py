@@ -18,6 +18,7 @@ class StorageImplementation(StorageInterface):
         pet = Pet.objects.get(pet_id=pet_id)
         pet_id_dto = self._convert_pet_object_to_pet_id_dto(pet=pet)
         pet.delete()
+        #todo: if we are only returning pet_id, we don't need a dto here just one return value
         return pet_id_dto
 
     def create_pet(self, shelter_id: int, pet_id: int, name: str, age: int, pet_category: str, gender: str,
@@ -29,6 +30,8 @@ class StorageImplementation(StorageInterface):
 
     def update_pet(self, pet_id: int, name: str, age: int, pet_category: str, gender: str,
                    size: str) -> PetDetailsDTO:
+        #todo: we can call the save method only once after all attributes are updated in pet object
+        # calling it multiple times will trigger multiple DB Calls
         pet = Pet.objects.get(pet_id=pet_id)
         pet.name = name
         pet.save()
@@ -46,6 +49,9 @@ class StorageImplementation(StorageInterface):
     def get_pets_list(self, shelter_id: int, pet_category: str, gender: str,
                       size: str) -> List[PetDetailsDTO]:
         pets_list = list(Pet.objects.filter(shelter_id=shelter_id))
+        #todo: we can use the `is not` operator here instead of `=!`
+        #todo: what if i give pet_category, gender and size as non null values,
+        # then `and` filtering is not being handled here
         if pet_category != None:
             filtered_pets_list = list(Pet.objects.filter(pet_category=pet_category))
             pets_list = [pet for pet in pets_list if pet in filtered_pets_list]
@@ -109,6 +115,7 @@ class StorageImplementation(StorageInterface):
 
     @staticmethod
     def _convert_pet_object_to_dto(pet: Pet):
+        #todo: add return value in typing for this function
         pet_dto = PetDetailsDTO(
             pet_id=pet.pet_id,
             name=pet.name,

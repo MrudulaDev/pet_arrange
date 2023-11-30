@@ -11,6 +11,7 @@ class GetPetsListInteractor:
     def __init__(self, storage: StorageInterface):
         self.storage = storage
 
+    #todo: wrap the args into dto and add optional, enum typings for relevant args
     def get_pets_list_wrapper(self, user_id: str, shelter_id: int, gender: str, pet_category: str, size: str,
                               presenter: GetPetsListPresenterInterface) -> HttpResponse:
         try:

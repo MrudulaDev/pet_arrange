@@ -27,8 +27,10 @@ class UpdatePetInteractor:
     def update_pet(self, user_id: str, pet_id: int, name: str, age: int, pet_category: str,
                    gender: str,
                    size: str) -> PetDetailsDTO:
+        #todo: method name and args are not in sync
         self.storage.validate_if_pet_exists_in_shelter(pet_id=pet_id, user_id=user_id)
         self.storage.validate_age(age=age)
+        #todo: better to be specific about the name here, i.e, pet name or shelter name
         self.storage.validate_if_name_already_exists(name=name)
         pet_details_dto = self.storage.update_pet(pet_id=pet_id, name=name, age=age,
                                                   pet_category=pet_category, gender=gender, size=size)

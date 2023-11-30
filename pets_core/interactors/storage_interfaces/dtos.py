@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class PetDetailsDTO:
     pet_id: int
     name: str
-    age: int
+    age: int # todo: should add the optional typing here
     pet_category: str
     size: str
     gender: str
