@@ -22,7 +22,7 @@ class DeletePetInteractor:
 
     def delete_pet(self, user_id: str, pet_id: int) -> PetIdDTO:
         self.storage.validate_pet_id(pet_id=pet_id)
+        #todo: the method name and args are not in sync, i.e, we are giving pet_id for validating shelter_id
         self.storage.validate_shelter_id(pet_id=pet_id, user_id=user_id)
-        pet_id_dto = \
-            self.storage.delete_pet(pet_id=pet_id)
+        pet_id_dto = self.storage.delete_pet(pet_id=pet_id)
         return pet_id_dto

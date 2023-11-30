@@ -3,7 +3,7 @@ from pets_core.interactors.storage_interfaces.storage_interface import PetDetail
 from django.http import HttpResponse
 from typing import List
 
-
+# todo: should inherit abc.ABC class to interface
 class GetPetsListPresenterInterface:
 
     @abstractmethod
