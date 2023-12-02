@@ -1,10 +1,10 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from pets_core.interactors.storage_interfaces.storage_interface import PetDetailsDTO
 from django.http import HttpResponse
 from typing import List
 
-# todo: should inherit abc.ABC class to interface
-class GetPetsListPresenterInterface:
+
+class GetPetsListPresenterInterface(ABC):
 
     @abstractmethod
     def get_response_for_get_pets_list(self, pets_list_dto: List[PetDetailsDTO]) -> HttpResponse:

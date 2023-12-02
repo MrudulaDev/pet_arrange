@@ -2,21 +2,20 @@ from typing import Dict
 from pets_core.constants.exception_messages import INVALID_PET_ID, WRONG_SHELTER_ID
 from django_swagger_utils.utils.http_response_mixin import HTTPResponseMixin
 from pets_core.interactors.presenter_interfaces.delete_pet_presenter_interface import DeletePetPresenterInterface
-from pets_core.interactors.storage_interfaces.storage_interface import PetIdDTO
 from pets_core.constants.enums import StatusCode
 from django.http import HttpResponse
 
 
 class PresenterImplementation(DeletePetPresenterInterface, HTTPResponseMixin):
 
-    def get_response_for_delete_pet(self, pet_id_dto: PetIdDTO) -> HttpResponse:
-        pet_id_dict = self._get_pet_id(pet_id_dto)
+    def get_response_for_delete_pet(self, pet_id: int) -> HttpResponse:
+        pet_id_dict = self._get_pet_id(pet_id)
         return self.prepare_200_success_response(response_dict=pet_id_dict)
 
     @staticmethod
-    def _get_pet_id(pet_id_dto: PetIdDTO) -> Dict:
+    def _get_pet_id(pet_id: int) -> Dict:
         pet_id_dict = {
-            "pet_id": pet_id_dto.pet_id
+            "pet_id": pet_id
         }
         return pet_id_dict
 

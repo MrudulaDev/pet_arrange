@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, PetIdDTO
+from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO
 from typing import List
 
 
@@ -10,22 +10,19 @@ class StorageInterface:
         pass
 
     @abstractmethod
-    def delete_pet(self, pet_id: int) -> PetIdDTO:
+    def delete_pet(self, pet_id: int) -> int:
         pass
 
     @abstractmethod
-    def create_pet(self, shelter_id: int, pet_id: int, name: str, age: int, pet_category: str, gender: str,
-                   size: str) -> PetDetailsDTO:
+    def create_pet(self, pet_details_dto: PetDetailsDTO) -> PetDetailsDTO:
         pass
 
     @abstractmethod
-    def update_pet(self, pet_id: int, name: str, age: int, pet_category: str, gender: str,
-                   size: str) -> PetDetailsDTO:
+    def update_pet(self, pet_details_dto: PetDetailsDTO) -> PetDetailsDTO:
         pass
 
     @abstractmethod
-    def get_pets_list(self, shelter_id: int, pet_category: str, gender: str,
-                      size: str) -> List[PetDetailsDTO]:
+    def get_pets_list(self, filter_params: GetPetsFilterParamsDTO) -> List[PetDetailsDTO]:
         pass
 
     @abstractmethod
@@ -33,7 +30,7 @@ class StorageInterface:
         pass
 
     @abstractmethod
-    def validate_shelter_id(self, user_id: str, pet_id: int) -> None:
+    def validate_user_access_to_pet_shelter(self, user_id: str, pet_id: int) -> None:
         pass
 
     @abstractmethod
@@ -49,11 +46,11 @@ class StorageInterface:
         pass
 
     @abstractmethod
-    def validate_if_pet_exists_in_shelter(self, pet_id: int, user_id: str) -> None:
+    def validate_if_pet_exists_in_user_shelter(self, pet_id: int, user_id: str) -> None:
         pass
 
     @abstractmethod
-    def validate_if_name_already_exists(self, name: str) -> None:
+    def validate_if_pet_name_already_exists(self, name: str) -> None:
         pass
 
     @abstractmethod

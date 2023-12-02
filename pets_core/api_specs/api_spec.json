@@ -625,6 +625,7 @@
           "required": [
               "pet_id",
               "name",
+              "age",
               "pet_category",
               "size",
               "gender"

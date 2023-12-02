@@ -22,7 +22,7 @@ class GetPetInteractor:
 
     def get_pet(self, user_id: str, pet_id: int) -> PetDetailsDTO:
         self.storage.validate_pet_id(pet_id=pet_id)
-        self.storage.validate_shelter_id(pet_id=pet_id, user_id=user_id)
+        self.storage.validate_user_access_to_pet_shelter(pet_id=pet_id, user_id=user_id)
         pet_details_dto = \
             self.storage.get_pet(pet_id=pet_id)
         return pet_details_dto

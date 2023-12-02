@@ -4,23 +4,33 @@ from .validator_class import ValidatorClass
 from pets_core.storages.storage_implementation import StorageImplementation
 from pets_core.presenters.create_pet_presenter_implementation import PresenterImplementation
 from pets_core.interactors.create_pet_interactor import CreatePetInteractor
+from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO
 
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
     user_id = str(kwargs['user'])
-
-    # todo: instead of accessing `request_data` key multiple times, we can use a variable
-    shelter_id = kwargs['request_data']['shelter_id']
-    pet_id = kwargs['request_data']['pet_id']
-    name = kwargs['request_data']['name']
-    age = kwargs['request_data']['age']
-    pet_category = kwargs['request_data']['pet_category']
-    size = kwargs['request_data']['size']
-    gender = kwargs['request_data']['gender']
+    request_data = kwargs['request_data']
+    shelter_id = request_data['shelter_id']
+    pet_id = request_data['pet_id']
+    name = request_data['name']
+    age = request_data['age']
+    pet_category = request_data['pet_category']
+    size = request_data['size']
+    gender = request_data['gender']
+    status = request_data['status']
     storage = StorageImplementation()
     presenter = PresenterImplementation()
     interactor = CreatePetInteractor(storage=storage)
-    return interactor.create_pet_wrapper(user_id=user_id, pet_id=pet_id, shelter_id=shelter_id, name=name, age=age,
-                                         pet_category=pet_category,
-                                         size=size, gender=gender, presenter=presenter)
+    pet_details_dto = PetDetailsDTO(
+        pet_id=pet_id,
+        name=name,
+        age=age,
+        pet_category=pet_category,
+        size=size,
+        gender=gender,
+        status=status,
+        shelter_id=shelter_id
+    )
+    return interactor.create_pet_wrapper(user_id=user_id, pet_details_dto=pet_details_dto,
+                                         presenter=presenter)
