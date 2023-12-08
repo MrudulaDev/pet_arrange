@@ -14,7 +14,7 @@ def api_wrapper(*args, **kwargs):
     query_params = kwargs['request_query_params']
     gender = query_params['gender']
     pet_category = query_params['pet_category']
-    size = query_params['size']
+    pet_size = query_params['pet_size']
     storage = StorageImplementation()
     presenter = GetPetsListPresenterImplementation()
     interactor = GetPetsListInteractor(storage=storage)
@@ -22,7 +22,7 @@ def api_wrapper(*args, **kwargs):
         shelter_id=shelter_id,
         gender=gender,
         pet_category=pet_category,
-        size=size
+        pet_size=pet_size
     )
     result = interactor.get_pets_list_wrapper(user_id=user_id, filter_params=get_pet_filter_params, presenter=presenter)
     return result

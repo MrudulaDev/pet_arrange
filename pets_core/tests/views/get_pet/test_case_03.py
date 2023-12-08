@@ -1,15 +1,14 @@
 """
-Test with valid data, Response with 200
+Test with wrong shelter, Response with 401
 """
 import pytest
 from django_swagger_utils.utils.test_utils import TestUtils
-from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 from pets_core.tests.factories.models import PetFactory, ShelterFactory
-from pets_core.models.shelter import Shelter
-import factory
+from pets_core.models.pet import Pet
+from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
 
 
-class TestCase01GetPetsListAPITestCase(TestUtils):
+class TestWithWrongShelter(TestUtils):
     APP_NAME = APP_NAME
     OPERATION_NAME = OPERATION_NAME
     REQUEST_METHOD = REQUEST_METHOD
@@ -17,18 +16,18 @@ class TestCase01GetPetsListAPITestCase(TestUtils):
     SECURITY = {'oauth': {'scopes': ['superuser']}}
 
     @pytest.mark.django_db
-    def test_with_valid_data(self, snapshot, create_shelters_and_pets_in_them, api_user):
-        shelter1 = Shelter.objects.get(shelter_id=1)
-        shelter1.user_id = str(api_user.user_id)
-        shelter1.save()
+    def test_case(self, snapshot, api_user):
+        # Arrange
+        PetFactory(pet_id=1)
+        shelter1 = ShelterFactory(shelter_id=1, user_id="2")
+        shelter2 = ShelterFactory(shelter_id=2, user_id=str(api_user.user_id))
+        Pet.objects.filter(pet_id=1).update(shelter=shelter1)
         body = {}
-        path_params = {"shelter_id": 1}
-        query_params = {
-            'pet_category': 'DOG',
-            'pet_size': 'SMALL',
-            'gender': 'FEMALE'
-        }
+        path_params = {"pet_id": 1}
+        query_params = {}
         headers = {}
+
+        # Act
         response = self.make_api_call(body=body,
                                       path_params=path_params,
                                       query_params=query_params,

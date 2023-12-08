@@ -29,7 +29,7 @@ class Pet(models.Model):
     name = models.CharField(max_length=50, unique=True)
     age = models.IntegerField(blank=True, null=True)
     pet_category = models.CharField(max_length=20, choices=PetCategory_Choice, default=None, null=True)
-    size = models.CharField(max_length=20, choices=PetSize_Choice, default=None, null=True)
+    pet_size = models.CharField(max_length=20, choices=PetSize_Choice, default=None, null=True)
     gender = models.CharField(max_length=20, choices=PetGender_Choice, default=None, null=True)
     status = models.CharField(max_length=20, choices=PetStatus_Choice, blank=True, null=True)
     shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE, related_name='pets', blank=True, null=True)

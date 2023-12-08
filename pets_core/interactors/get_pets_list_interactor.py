@@ -4,6 +4,7 @@ from pets_core.exceptions.custom_exceptions import ShelterNotFound, WrongShelter
 from django.http import HttpResponse
 from pets_core.interactors.storage_interfaces.dtos import GetPetsFilterParamsDTO, PetDetailsDTO
 from typing import List
+from pets_core.models.pet import Pet
 
 
 class GetPetsListInteractor:
@@ -26,5 +27,6 @@ class GetPetsListInteractor:
         self.storage.validate_if_shelter_exists(shelter_id=filter_params.shelter_id)
         self.storage.validate_shelter_id_authorization_with_shelter_id(shelter_id=filter_params.shelter_id,
                                                                        user_id=user_id)
+        pets_list= Pet.objects.all()
         pets_list_dto = self.storage.get_pets_list(filter_params=filter_params)
         return pets_list_dto

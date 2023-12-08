@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO
+from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO, UpdatePetDetailsDTO
 from typing import List
 
 
@@ -18,7 +18,7 @@ class StorageInterface:
         pass
 
     @abstractmethod
-    def update_pet(self, pet_details_dto: PetDetailsDTO) -> PetDetailsDTO:
+    def update_pet(self, pet_details_dto: UpdatePetDetailsDTO) -> UpdatePetDetailsDTO:
         pass
 
     @abstractmethod
@@ -41,9 +41,6 @@ class StorageInterface:
     def validate_shelter_id_authorization_with_shelter_id(self, user_id: str, shelter_id: int) -> None:
         pass
 
-    @abstractmethod
-    def validate_age(self, age: int) -> None:
-        pass
 
     @abstractmethod
     def validate_if_pet_exists_in_user_shelter(self, pet_id: int, user_id: str) -> None:

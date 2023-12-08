@@ -73,7 +73,7 @@
                     "OTHERS"
                 ]
             },
-            "size": {
+            "pet_size": {
                 "type": "string",
                 "description": "The size of the pet (e.g., small, medium, large)",
                 "enum": [
@@ -96,7 +96,7 @@
             "name",
             "age",
             "pet_category",
-            "size",
+            "pet_size",
             "gender"
           ]
         }
@@ -168,7 +168,7 @@
                             "OTHERS"
                         ]
                     },
-                    "size": {
+                    "pet_size": {
                         "type": "string",
                         "description": "The size of the pet (e.g., small, medium, large)",
                         "enum": [
@@ -184,6 +184,14 @@
                           "MALE",
                           "FEMALE"
                         ]
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "The status of the pet",
+                        "enum": [
+                          "AVAILABLE",
+                          "ADOPTED"
+                        ]
                     }
                 },
                 "required": [
@@ -191,7 +199,7 @@
                     "pet_id",
                     "name",
                     "pet_category",
-                    "size",
+                    "pet_size",
                     "gender"
                 ]
             }
@@ -226,7 +234,7 @@
                             "OTHERS"
                         ]
                     },
-                    "size": {
+                    "pet_size": {
                         "type": "string",
                         "description": "The size of the pet (e.g., small, medium, large)",
                         "enum": [
@@ -248,7 +256,7 @@
                     "pet_id",
                     "name",
                     "pet_category",
-                    "size",
+                    "pet_size",
                     "gender"
                 ]
             }
@@ -291,7 +299,7 @@
                             "OTHERS"
                         ]
                     },
-                    "size": {
+                    "pet_size": {
                         "type": "string",
                         "description": "The size of the pet (e.g., small, medium, large)",
                         "enum": [
@@ -312,7 +320,7 @@
                 "required": [
                     "name",
                     "pet_category",
-                    "size",
+                    "pet_size",
                     "gender"
                 ]
             }
@@ -331,7 +339,7 @@
           ]
         },
         "SizeQueryParameter": {
-          "name": "size",
+          "name": "pet_size",
           "in": "query",
           "required": false,
           "type": "string",
@@ -486,7 +494,7 @@
                       "OTHERS"
                   ]
                 },
-                "size": {
+                "pet_size": {
                   "type": "string",
                   "description": "The size of the pet (e.g., small, medium, large)",
                   "enum": [
@@ -508,7 +516,7 @@
               "pet_id",
               "name",
               "pet_category",
-              "size",
+              "pet_size",
               "gender"
             ]
         }
@@ -604,7 +612,7 @@
                       "OTHERS"
                   ]
               },
-              "size": {
+              "pet_size": {
                   "type": "string",
                   "description": "The size of the pet (e.g., small, medium, large)",
                   "enum": [
@@ -627,7 +635,7 @@
               "name",
               "age",
               "pet_category",
-              "size",
+              "pet_size",
               "gender"
           ]
         }

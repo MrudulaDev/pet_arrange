@@ -14,11 +14,17 @@ def api_wrapper(*args, **kwargs):
     shelter_id = request_data['shelter_id']
     pet_id = request_data['pet_id']
     name = request_data['name']
-    age = request_data['age']
     pet_category = request_data['pet_category']
     size = request_data['size']
     gender = request_data['gender']
-    status = request_data['status']
+    if 'age' in request_data:
+        age = request_data['age']
+    else:
+        age = None
+    if 'status' in request_data:
+        status = request_data['status']
+    else:
+        status = None
     storage = StorageImplementation()
     presenter = PresenterImplementation()
     interactor = CreatePetInteractor(storage=storage)

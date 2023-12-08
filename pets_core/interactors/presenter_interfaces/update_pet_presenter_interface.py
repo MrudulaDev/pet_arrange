@@ -1,11 +1,11 @@
 from abc import abstractmethod, ABC
-from pets_core.interactors.storage_interfaces.storage_interface import PetDetailsDTO
+from pets_core.interactors.storage_interfaces.storage_interface import UpdatePetDetailsDTO
 from django.http import HttpResponse
 
 
 class UpdatePetPresenterInterface(ABC):
     @abstractmethod
-    def get_response_for_update_pet(self, pet_details_dto: PetDetailsDTO) -> HttpResponse:
+    def get_response_for_update_pet(self, pet_details_dto: UpdatePetDetailsDTO) -> HttpResponse:
         pass
 
     @abstractmethod

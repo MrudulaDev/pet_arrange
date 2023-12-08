@@ -1,10 +1,8 @@
-from ib_common.stores.key_store_v2 import DoesNotExist
-
 from pets_core.exceptions.custom_exceptions import InvalidPetId, WrongShelterId, PetIdAlreadyExists, \
     ShelterNotFound, PetNotFoundInShelter, NameAlreadyExists
 from pets_core.models.pet import Pet
 from pets_core.models.shelter import Shelter
-from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO
+from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO, UpdatePetDetailsDTO
 from pets_core.interactors.storage_interfaces.storage_interface import StorageInterface
 from typing import List
 from django.db.models import Q
@@ -25,20 +23,21 @@ class StorageImplementation(StorageInterface, ABC):
     def create_pet(self, pet_details_dto: PetDetailsDTO):
         pet_id = pet_details_dto.pet_id
         name = pet_details_dto.name
-        age = pet_details_dto.age
         pet_category = pet_details_dto.pet_category
         gender = pet_details_dto.gender
-        size = pet_details_dto.size
+        pet_size = pet_details_dto.pet_size
         shelter_id = pet_details_dto.shelter_id
+        age = pet_details_dto.age
         status = pet_details_dto.status
-        Pet.objects.create(pet_id=pet_id, shelter_id=shelter_id, name=name, age=age,
-                           pet_category=pet_category, gender=gender, size=size, status=status)
+        pet = Pet.objects.create(pet_id=pet_id, shelter_id=shelter_id, name=name, age=age,
+                                 pet_category=pet_category, gender=gender, pet_size=pet_size, status=status)
+        return pet
 
-    def update_pet(self, pet_details_dto: PetDetailsDTO) -> PetDetailsDTO:
+    def update_pet(self, pet_details_dto: PetDetailsDTO) -> UpdatePetDetailsDTO:
         Pet.objects.filter(pet_id=pet_details_dto.pet_id).update(name=pet_details_dto.name, age=pet_details_dto.age,
                                                                  pet_category=pet_details_dto.pet_category,
                                                                  gender=pet_details_dto.gender,
-                                                                 size=pet_details_dto.size)
+                                                                 pet_size=pet_details_dto.pet_size)
         pet = Pet.objects.get(pet_id=pet_details_dto.pet_id)
         pet_dto = self._convert_pet_object_to_dto(pet=pet)
         return pet_dto
@@ -47,16 +46,16 @@ class StorageImplementation(StorageInterface, ABC):
         shelter_id = filter_params.shelter_id
         pet_category = filter_params.pet_category
         gender = filter_params.gender
-        size = filter_params.size
+        pet_size = filter_params.pet_size
         filters = Q(shelter_id=shelter_id)
         if pet_category is not None:
             filters &= Q(pet_category=pet_category)
         if gender is not None:
             filters &= Q(gender=gender)
-        if size is not None:
-            filters &= Q(size=size)
-        pets_list = Pet.objects.filter(filters)
-        pets_list_dto = self._convert_pet_objects_to_dto(pets_list=pets_list)
+        if pet_size is not None:
+            filters &= Q(pet_size=pet_size)
+        filtered_pets_list = Pet.objects.filter(filters)
+        pets_list_dto = self._convert_pet_objects_to_dto(pets_list=filtered_pets_list)
         return pets_list_dto
 
     def validate_pet_id(self, pet_id: int):
@@ -101,7 +100,7 @@ class StorageImplementation(StorageInterface, ABC):
     def validate_if_shelter_exists(self, shelter_id: int):
         try:
             Shelter.objects.get(shelter_id=shelter_id)
-        except DoesNotExist:
+        except :
             raise ShelterNotFound(shelter_id=shelter_id)
 
     @staticmethod
@@ -111,9 +110,10 @@ class StorageImplementation(StorageInterface, ABC):
             name=pet.name,
             age=pet.age,
             pet_category=pet.pet_category,
-            size=pet.size,
+            pet_size=pet.pet_size,
             gender=pet.gender,
-            status=pet.status
+            status=pet.status,
+            shelter_id=pet.shelter
         )
         return pet_dto
 
@@ -126,9 +126,10 @@ class StorageImplementation(StorageInterface, ABC):
                 name=pet.name,
                 age=pet.age,
                 pet_category=pet.pet_category,
-                size=pet.size,
+                pet_size=pet.pet_size,
                 gender=pet.gender,
-                status=pet.status
+                status=pet.status,
+                shelter_id=pet.shelter
             )
             pets_list_dto += [pet_dto]
         return pets_list_dto

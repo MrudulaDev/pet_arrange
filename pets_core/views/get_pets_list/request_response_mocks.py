@@ -9,7 +9,7 @@ RESPONSE_200_JSON = """
             "name": "string",
             "age": 1,
             "pet_category": "DOG",
-            "size": "SMALL",
+            "pet_size": "SMALL",
             "gender": "MALE"
         }
     ]

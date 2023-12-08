@@ -33,5 +33,6 @@ class CreatePetInteractor:
 
     @staticmethod
     def validate_age(age: int) -> None:
-        if age <= 0:
-            raise InvalidAge(age=age)
+        if age is not None:
+            if age <= 0:
+                raise InvalidAge(age=age)

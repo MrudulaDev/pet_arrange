@@ -22,7 +22,7 @@ class GetPetsListPresenterImplementation(GetPetsListPresenterInterface, HTTPResp
                 "name": pet_dto.name,
                 "age": pet_dto.age,
                 "pet_category": pet_dto.pet_category,
-                "size": pet_dto.size,
+                "pet_size": pet_dto.pet_size,
                 "gender": pet_dto.gender,
                 "status": pet_dto.status
             }

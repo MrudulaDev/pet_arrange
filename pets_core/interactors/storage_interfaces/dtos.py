@@ -8,14 +8,22 @@ class PetDetailsDTO:
     name: str
     age: Optional[int]
     pet_category: PetCategory
-    size: PetSize
+    pet_size: PetSize
     gender: PetGender
     status: Optional[PetStatus]
-    shelter_id: int
-
+    shelter_id: Optional[int]
 @dataclass
 class GetPetsFilterParamsDTO:
     shelter_id: int
     pet_category: Optional[PetCategory]
-    size: Optional[PetSize]
+    pet_size: Optional[PetSize]
     gender: Optional[PetGender]
+
+@dataclass
+class UpdatePetDetailsDTO:
+    pet_id: int
+    name: str
+    pet_category: PetCategory
+    pet_size: PetSize
+    gender: PetGender
+    age: Optional[int] = 0

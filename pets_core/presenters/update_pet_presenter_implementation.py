@@ -2,27 +2,26 @@ from typing import Dict
 from pets_core.constants.exception_messages import PET_NOT_FOUND_IN_SHELTER, NAME_ALREADY_IN_USE, INVALID_AGE
 from django_swagger_utils.utils.http_response_mixin import HTTPResponseMixin
 from pets_core.interactors.presenter_interfaces.update_pet_presenter_interface import UpdatePetPresenterInterface
-from pets_core.interactors.storage_interfaces.storage_interface import PetDetailsDTO
+from pets_core.interactors.storage_interfaces.storage_interface import UpdatePetDetailsDTO
 from pets_core.constants.enums import StatusCode
 from django.http import HttpResponse
 
 
 class PresenterImplementation(UpdatePetPresenterInterface, HTTPResponseMixin):
 
-    def get_response_for_update_pet(self, pet_details_dto: PetDetailsDTO) -> HttpResponse:
+    def get_response_for_update_pet(self, pet_details_dto: UpdatePetDetailsDTO) -> HttpResponse:
         pet_details_dict = self._update_pet_details(pet_details_dto)
         return self.prepare_200_success_response(response_dict=pet_details_dict)
 
     @staticmethod
-    def _update_pet_details(pet_dto: PetDetailsDTO) -> Dict:
+    def _update_pet_details(pet_dto: UpdatePetDetailsDTO) -> Dict:
         pet_details_dict = {
             "pet_id": pet_dto.pet_id,
             "name": pet_dto.name,
-            "age": pet_dto.age,
             "pet_category": pet_dto.pet_category,
-            "size": pet_dto.size,
+            "pet_size": pet_dto.pet_size,
             "gender": pet_dto.gender,
-            "status": pet_dto.status
+            "age": pet_dto.age
         }
         return pet_details_dict
 
