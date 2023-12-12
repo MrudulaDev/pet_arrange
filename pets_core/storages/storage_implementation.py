@@ -1,8 +1,15 @@
 from pets_core.exceptions.custom_exceptions import InvalidPetId, WrongShelterId, PetIdAlreadyExists, \
-    ShelterNotFound, PetNotFoundInShelter, NameAlreadyExists
+    ShelterNotFound, PetNotFoundInShelter, NameAlreadyExists, UserIsNotAdopter, AdoptionRequestAlreadyRaised, \
+    PetAlreadyAdopted, AdoptionRequestNotFound, AdoptionRequestAccessDenied, AdoptionRequestClosed, \
+    AdoptionRequestAlreadyApproved
+from pets_core.constants.enums import PetStatus, RequestStatus
 from pets_core.models.pet import Pet
 from pets_core.models.shelter import Shelter
-from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO, UpdatePetDetailsDTO
+from pets_core.models.adopter import Adopter
+from pets_core.models.request import Request
+from pets_core.interactors.storage_interfaces.dtos import PetDetailsDTO, GetPetsFilterParamsDTO, UpdatePetDetailsDTO, \
+    AdoptionRequestDTO, CreateAdoptionRequestDTO, GetAdoptionRequestDTO, ApproveAdoptionRequestDTO, \
+    GetAdoptionRequestsListDTO
 from pets_core.interactors.storage_interfaces.storage_interface import StorageInterface
 from typing import List
 from django.db.models import Q
@@ -58,6 +65,14 @@ class StorageImplementation(StorageInterface, ABC):
         pets_list_dto = self._convert_pet_objects_to_dto(pets_list=filtered_pets_list)
         return pets_list_dto
 
+    def create_adoption_request(self, create_adoption_request_dto: CreateAdoptionRequestDTO,
+                                adopter_id: int) -> AdoptionRequestDTO:
+        pet = Pet.objects.get(pet_id=create_adoption_request_dto.pet_id)
+        adopter = Adopter.objects.get(id=adopter_id)
+        request = Request.objects.create(requested_by=adopter, requested_pet=pet)
+        adoption_request_dto = self._convert_request_object_to_dto(request=request)
+        return adoption_request_dto
+
     def validate_pet_id(self, pet_id: int):
         is_valid_pet_id = Pet.objects.filter(pet_id=pet_id).exists()
         is_invalid_pet_id = not is_valid_pet_id
@@ -100,8 +115,81 @@ class StorageImplementation(StorageInterface, ABC):
     def validate_if_shelter_exists(self, shelter_id: int):
         try:
             Shelter.objects.get(shelter_id=shelter_id)
-        except :
+        except:
             raise ShelterNotFound(shelter_id=shelter_id)
+
+    def validate_if_pet_already_adopted(self, pet_id: int):
+        if Pet.objects.filter(pet_id=pet_id).values_list('status', flat=True).first() == PetStatus.ADOPTED.value:
+            raise PetAlreadyAdopted(pet_id=pet_id)
+
+    def validate_if_user_is_adopter(self, user_id: str):
+        try:
+            Adopter.objects.get(user_id=user_id)
+        except:
+            raise UserIsNotAdopter(user_id=user_id)
+
+    def get_adopter_id(self, user_id: str):
+        adopter_id = Adopter.objects.filter(user_id=user_id).values_list('id', flat=True).first()
+        return adopter_id
+
+    def validate_if_request_already_raised(self, adopter_id: int, pet_id: int):
+        pet = Pet.objects.get(pet_id=pet_id)
+        adopter = Adopter.objects.get(id=adopter_id)
+        if Request.objects.filter(requested_pet=pet, requested_by=adopter).exists():
+            request_id = Request.objects.get(requested_pet=pet, requested_by=adopter)
+            raise AdoptionRequestAlreadyRaised(request_id=request_id)
+
+    def validate_adoption_request_id(self, request_id: int):
+        try:
+            Request.objects.get(request_id=request_id)
+        except:
+            raise AdoptionRequestNotFound(request_id=request_id)
+
+    def validate_adoption_request_access(self, request_id: int, user_id: str):
+        request = Request.objects.get(request_id=request_id)
+        pet = request.requested_pet
+        adopter = request.requested_by
+        requested_pet_shelter_user_id = pet.shelter.user_id
+        requested_pet_adopter_user_id = adopter.user_id
+        if user_id not in [requested_pet_shelter_user_id, requested_pet_adopter_user_id]:
+            raise AdoptionRequestAccessDenied(user_id=user_id)
+
+    def get_adoption_request(self, get_adoption_request_dto: GetAdoptionRequestDTO) -> AdoptionRequestDTO:
+        request = Request.objects.get(request_id=get_adoption_request_dto.request_id)
+        adoption_request_dto = self._convert_request_object_to_dto(request=request)
+        return adoption_request_dto
+
+    def validate_adoption_request_already_approved(self, request_id: int):
+        request = Request.Objects.get(request_id=request_id)
+        if request.request_status is RequestStatus.APPROVED.value:
+            raise AdoptionRequestAlreadyApproved(request_id=request_id)
+
+    def validate_adoption_request_closed(self, request_id: int):
+        request = Request.Objects.get(request_id=request_id)
+        if request.request_status is RequestStatus.CLOSED.value:
+            raise AdoptionRequestClosed(request_id=request_id)
+
+    def approve_adoption_request(self, approve_adoption_request_dto: ApproveAdoptionRequestDTO) -> AdoptionRequestDTO:
+        request = Request.Objects.get(request_id=approve_adoption_request_dto.request_id)
+        request.request_status = RequestStatus.APPROVED.value
+        request.save()
+        adoption_request_dto = self._convert_request_object_to_dto(request=request)
+        return adoption_request_dto
+
+    def close_all_other_adoption_requests_on_requested_pet(self, request_id: int):
+        requested_pet = Request.objects.get(request_id=request_id).requested_pet
+        all_pet_requests = Request.Objects.filter(requested_pet=requested_pet)
+        for each_request in all_pet_requests:
+            if each_request.request_id is not request_id:
+                each_request.request_status = RequestStatus.CLOSED.value
+                each_request.save()
+
+    def get_adoption_requests_list(self,
+                                   get_adoption_requests_list_dto: GetAdoptionRequestsListDTO) -> List[AdoptionRequestDTO]:
+        requests_in_shelter = Request.objects.filter(
+            requested_pet__shelter__shelter_id=get_adoption_requests_list_dto.shelter_id)
+        adoption_request_dtos_list = self._convert_request_objects_to_dtos_list(request_objs_list=requests_in_shelter)
+        return adoption_request_dtos_list
 
     @staticmethod
     def _convert_pet_object_to_dto(pet: Pet) -> PetDetailsDTO:
@@ -133,3 +221,28 @@ class StorageImplementation(StorageInterface, ABC):
             )
             pets_list_dto += [pet_dto]
         return pets_list_dto
+
+    @staticmethod
+    def _convert_request_object_to_dto(request: Request) -> AdoptionRequestDTO:
+        adoption_request_dto = AdoptionRequestDTO(
+            request_id=request.request_id,
+            request_status=request.request_status,
+            pet_id=request.requested_pet,
+            adopter_id=request.requested_by,
+            requested_at=request.requested_at
+        )
+        return adoption_request_dto
+
+    @staticmethod
+    def _convert_request_objects_to_dtos_list(request_objs_list: List) -> List[AdoptionRequestDTO]:
+        request_dtos_list = []
+        for request in request_objs_list:
+            request_dto = AdoptionRequestDTO(
+                request_id=request.request_id,
+                request_status=request.request_status,
+                pet_id=request.requested_pet,
+                adopter_id=request.requested_by,
+                requested_at=request.requested_at
+            )
+            request_dtos_list += [request_dto]
+        return request_dtos_list

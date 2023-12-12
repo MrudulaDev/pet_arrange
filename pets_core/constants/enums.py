@@ -25,6 +25,12 @@ class PetStatus(Enum):
     ADOPTED = "ADOPTED"
 
 
+class RequestStatus(Enum):
+    OPEN = "OPEN"
+    APPROVED = "APPROVED"
+    CLOSED = "CLOSED"
+
+
 class StatusCode(Enum):
     UNAUTHORIZED = 401
     BAD_REQUEST = 400

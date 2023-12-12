@@ -27,6 +27,5 @@ class GetPetsListInteractor:
         self.storage.validate_if_shelter_exists(shelter_id=filter_params.shelter_id)
         self.storage.validate_shelter_id_authorization_with_shelter_id(shelter_id=filter_params.shelter_id,
                                                                        user_id=user_id)
-        pets_list= Pet.objects.all()
         pets_list_dto = self.storage.get_pets_list(filter_params=filter_params)
         return pets_list_dto

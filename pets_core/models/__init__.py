@@ -1,11 +1,13 @@
 from .shelter import Shelter
 from .pet import Pet
 from .adopter import Adopter
+from .request import Request
 
 __all__ = [
     "Shelter",
     "Pet",
-    "Adopter"
+    "Adopter",
+    "Request"
 ]
 
 
