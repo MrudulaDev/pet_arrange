@@ -28,9 +28,12 @@ class ApproveAdoptionRequestInteractor:
         return presenter.get_response_for_approve_adoption_request(adoption_request_dto=adoption_request_dto)
 
     def approve_adoption_request(self, approve_adoption_request_dto) -> AdoptionRequestDTO:
+        # todo: typing for input args
         self.storage.validate_adoption_request_id(request_id=approve_adoption_request_dto.request_id)
         self.storage.validate_adoption_request_access(request_id=approve_adoption_request_dto.request_id,
                                                       user_id=approve_adoption_request_dto.user_id)
+        # todo: instead of doing the below two validations in a separate storage method (hits database twice),
+        #  we can fetch the request status (hits database once) and validate below validations in interactor
         self.storage.validate_adoption_request_already_approved(request_id=approve_adoption_request_dto.request_id)
         self.storage.validate_adoption_request_closed(request_id=approve_adoption_request_dto.request_id)
         adoption_request_dto = self.storage.approve_adoption_request(

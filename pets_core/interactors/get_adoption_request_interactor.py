@@ -22,6 +22,7 @@ class GetAdoptionRequestInteractor:
         return presenter.get_response_for_get_adoption_request(adoption_request_dto=adoption_request_dto)
 
     def get_adoption_request(self, get_adoption_request_dto) -> AdoptionRequestDTO:
+        # todo: typing for input args
         self.storage.validate_adoption_request_id(request_id=get_adoption_request_dto.request_id)
         self.storage.validate_adoption_request_access(request_id=get_adoption_request_dto.request_id,
                                                       user_id=get_adoption_request_dto.user_id)

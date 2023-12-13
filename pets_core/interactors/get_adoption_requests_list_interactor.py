@@ -25,6 +25,7 @@ class GetAdoptionRequestsListInteractor:
             adoption_request_dtos_list=adoption_request_dtos_list)
 
     def get_adoption_requests_list(self, get_adoption_requests_list_dto) -> List[AdoptionRequestDTO]:
+        # todo: tying for input args
         self.storage.validate_if_shelter_exists(shelter_id=get_adoption_requests_list_dto.shelter_id)
         self.storage.validate_shelter_id_authorization_with_shelter_id(
             shelter_id=get_adoption_requests_list_dto.shelter_id,
