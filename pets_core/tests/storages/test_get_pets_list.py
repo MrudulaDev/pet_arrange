@@ -7,10 +7,10 @@ from pets_core.tests.factories.storage_dtos import GetPetsFilterParamsDTOFactory
 
 class TestGetPetsList:
     @pytest.mark.django_db
-    def test_with_all_valid_values_in_filter_params(self, create_shelters_and_pets_in_them_return_pets_list):
+    def test_with_all_valid_values_in_filter_params(self, create_shelters_and_pets):
         # Arrange
         storage = StorageImplementation()
-        pets_list = create_shelters_and_pets_in_them_return_pets_list
+        pets_list = create_shelters_and_pets
         filter_params = GetPetsFilterParamsDTOFactory()
         filtered_pets = [pet for pet in pets_list if all([
             (filter_params.shelter_id is None or pet.shelter_id == filter_params.shelter_id),
@@ -26,10 +26,10 @@ class TestGetPetsList:
         assert filtered_pets == pet_dtos_list
 
     @pytest.mark.django_db
-    def test_with_all_null_values_in_filter_params(self, create_shelters_and_pets_in_them_return_pets_list):
+    def test_with_all_null_values_in_filter_params(self, create_shelters_and_pets):
         # Arrange
         storage = StorageImplementation()
-        pets_list = create_shelters_and_pets_in_them_return_pets_list
+        pets_list = create_shelters_and_pets
         filter_params = GetPetsFilterParamsDTOFactory(pet_category=None, pet_size=None, gender=None)
         filtered_pets = [pet for pet in pets_list if all([
             (filter_params.shelter_id is None or pet.shelter_id == filter_params.shelter_id),
@@ -46,10 +46,10 @@ class TestGetPetsList:
 
     @pytest.mark.django_db
     def test_with_combination_of_null_and_non_null_values(self,
-                                                          create_shelters_and_pets_in_them_return_pets_list):
+                                                          create_shelters_and_pets):
         # Arrange
         storage = StorageImplementation()
-        pets_list = create_shelters_and_pets_in_them_return_pets_list
+        pets_list = create_shelters_and_pets
         filter_params = GetPetsFilterParamsDTOFactory(pet_size=None, gender=None)
         filtered_pets = [pet for pet in pets_list if all([
             (filter_params.shelter_id is None or pet.shelter_id == filter_params.shelter_id),

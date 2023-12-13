@@ -1,7 +1,10 @@
 import pytest
-from pets_core.models.pet import Pet, Shelter
+import factory
+from pets_core.models.pet import Pet
+from pets_core.models.shelter import Shelter
+from pets_core.models.adopter import Adopter
 from pets_core.constants.enums import PetCategory, PetSize, PetGender, PetStatus
-
+from pets_core.tests.factories.models import PetFactory, AdopterFactory, ShelterFactory, RequestFactory
 @pytest.fixture()
 def create_pets():
     pets = [{
@@ -48,3 +51,4 @@ def create_pets():
         )
         pets_list += [pet_obj]
     return pets_list
+

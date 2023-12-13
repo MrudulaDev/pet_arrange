@@ -17,7 +17,7 @@ class TestCreatePet:
         assert created_pet.name == pet_details_dto.name
         assert created_pet.pet_category == pet_details_dto.pet_category
         assert created_pet.gender == pet_details_dto.gender
-        assert created_pet.size == pet_details_dto.pet_size
+        assert created_pet.pet_size == pet_details_dto.pet_size
         assert created_pet.shelter_id == pet_details_dto.shelter_id
         assert created_pet.age == pet_details_dto.age
         assert created_pet.status == pet_details_dto.status

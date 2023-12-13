@@ -14,6 +14,7 @@ from pets_core.interactors.storage_interfaces.storage_interface import StorageIn
 from typing import List
 from django.db.models import Q
 from abc import ABC
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class StorageImplementation(StorageInterface, ABC):
@@ -67,12 +68,9 @@ class StorageImplementation(StorageInterface, ABC):
 
     def create_adoption_request(self, create_adoption_request_dto: CreateAdoptionRequestDTO,
                                 adopter_id: int) -> AdoptionRequestDTO:
-        # todo: we should not fetch pet, adopter objects again here,
-        #  instead we shall pass their primary key values in input as they are foreign keys
-        #  to avoid extra database calls
-        pet = Pet.objects.get(pet_id=create_adoption_request_dto.pet_id)
-        adopter = Adopter.objects.get(id=adopter_id)
-        request = Request.objects.create(requested_by=adopter, requested_pet=pet)
+        request = Request(requested_by_id=adopter_id,
+                          requested_pet_id=create_adoption_request_dto.pet_id)
+        request.save()
         adoption_request_dto = self._convert_request_object_to_dto(request=request)
         return adoption_request_dto
 
@@ -122,15 +120,14 @@ class StorageImplementation(StorageInterface, ABC):
             raise ShelterNotFound(shelter_id=shelter_id)
 
     def validate_if_pet_already_adopted(self, pet_id: int):
-        # todo: Must encapsulate this condition expression, because this is somewhat not readable
-        if Pet.objects.filter(pet_id=pet_id).values_list('status', flat=True).first() == PetStatus.ADOPTED.value:
+        status = Pet.objects.filter(pet_id=pet_id).values_list('status', flat=True).first()
+        if status == PetStatus.ADOPTED.value:
             raise PetAlreadyAdopted(pet_id=pet_id)
 
     def validate_if_user_is_adopter(self, user_id: str):
         try:
             Adopter.objects.get(user_id=user_id)
-        # todo: handling bare exception here, should be handled in another way
-        except:
+        except ObjectDoesNotExist:
             raise UserIsNotAdopter(user_id=user_id)
 
     def get_adopter_id(self, user_id: str):
@@ -138,20 +135,13 @@ class StorageImplementation(StorageInterface, ABC):
         return adopter_id
 
     def validate_if_request_already_raised(self, adopter_id: int, pet_id: int):
-        # todo: querying over 2 models, should be split into 2 storage methods
-        #  and also we are fetching whole object unncecessarily where we only need ids
-        pet = Pet.objects.get(pet_id=pet_id)
-        adopter = Adopter.objects.get(id=adopter_id)
-        if Request.objects.filter(requested_pet=pet, requested_by=adopter).exists():
-            request_id = Request.objects.get(requested_pet=pet, requested_by=adopter)
+        if Request.objects.filter(requested_pet__pet_id=pet_id, requested_by__id=adopter_id).exists():
+            request_id = Request.objects.filter(requested_pet__pet_id=pet_id, requested_by__id=adopter_id).values_list(
+                'request_id', flat=True).first()
             raise AdoptionRequestAlreadyRaised(request_id=request_id)
 
     def validate_adoption_request_id(self, request_id: int):
-        # todo: we can use filter.exists() for query optimization,
-        #  and we need to handle the specific error here.
-        try:
-            Request.objects.get(request_id=request_id)
-        except:
+        if not Request.objects.filter(request_id=request_id).exists():
             raise AdoptionRequestNotFound(request_id=request_id)
 
     def validate_adoption_request_access(self, request_id: int, user_id: str):
@@ -183,8 +173,11 @@ class StorageImplementation(StorageInterface, ABC):
     def approve_adoption_request(self, approve_adoption_request_dto: ApproveAdoptionRequestDTO) -> AdoptionRequestDTO:
         request = Request.Objects.get(request_id=approve_adoption_request_dto.request_id)
         request.request_status = RequestStatus.APPROVED.value
-        # todo: need to update `status_change_timestamp` value
         request.save()
+        pet = request.requested_pet
+        pet.status = PetStatus.ADOPTED.value
+        pet.save()
+        # todo: need to update `status_change_timestamp` value
         adoption_request_dto = self._convert_request_object_to_dto(request=request)
         return adoption_request_dto
 
@@ -200,7 +193,8 @@ class StorageImplementation(StorageInterface, ABC):
                 each_request.save()
 
     def get_adoption_requests_list(self,
-                                   get_adoption_requests_list_dto: GetAdoptionRequestsListDTO) -> List[AdoptionRequestDTO]:
+                                   get_adoption_requests_list_dto: GetAdoptionRequestsListDTO) -> List[
+        AdoptionRequestDTO]:
         # todo: unnecessary join is being done in below query
         # todo: we are only filtering with shelter_id, what about pet_name and pet_category ?
         requests_in_shelter = Request.objects.filter(
@@ -245,9 +239,9 @@ class StorageImplementation(StorageInterface, ABC):
         adoption_request_dto = AdoptionRequestDTO(
             request_id=request.request_id,
             request_status=request.request_status,
-            pet_id=request.requested_pet,
-            adopter_id=request.requested_by,
-            requested_at=request.requested_at
+            pet_id=request.requested_pet.pet_id,
+            adopter_id=request.requested_by.id,
+            requested_at=str(request.requested_at)
         )
         return adoption_request_dto
 

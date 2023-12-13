@@ -12,13 +12,11 @@ from django.http import HttpResponse
 class PresenterImplementation(CreateAdoptionRequestPresenterInterface, HTTPResponseMixin):
 
     def get_response_for_create_adoption_request(self, adoption_request_dto: AdoptionRequestDTO) -> HttpResponse:
-        # todo: better we replace _create with _prepare or _get in below method name,
-        #  because create is often used to refer an entry creation in a database table
-        adoption_request_dict = self._create_adoption_request_details(adoption_request_dto)
+        adoption_request_dict = self._get_adoption_request_details(adoption_request_dto)
         return self.prepare_201_created_response(response_dict=adoption_request_dict)
 
     @staticmethod
-    def _create_adoption_request_details(adoption_request_dto: AdoptionRequestDTO) -> Dict:
+    def _get_adoption_request_details(adoption_request_dto: AdoptionRequestDTO) -> Dict:
         pet_details_dict = {
             "request_id": adoption_request_dto.request_id,
             "request_status": adoption_request_dto.request_status,

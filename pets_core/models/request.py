@@ -10,7 +10,7 @@ class Request(models.Model):
         (RequestStatus.APPROVED.value, RequestStatus.APPROVED.value),
         (RequestStatus.CLOSED.value, RequestStatus.CLOSED.value)
     )
-    request_id = models.IntegerField(primary_key=True)
+    request_id = models.AutoField(primary_key=True)
     request_status = models.CharField(max_length=20, choices=RequestStatus_Choice, default=RequestStatus.OPEN.value)
     requested_by = models.ForeignKey(Adopter, on_delete=models.CASCADE, related_name='requests')
     requested_pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='requests')
