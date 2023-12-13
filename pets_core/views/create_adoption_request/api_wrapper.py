@@ -9,6 +9,7 @@ from pets_core.interactors.storage_interfaces.dtos import CreateAdoptionRequestD
 
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
+    # todo: Access user_id from the attribute instead of depending on __str__ method of user class
     user_id = str(kwargs['user'])
     request_data = kwargs['request_data']
     pet_id = request_data['pet_id']
