@@ -18,6 +18,8 @@ class TestCase02CreateAdoptionRequestAPITestCase(TestUtils):
     def test_with_already_adopted_pet(self, snapshot, create_shelters_and_pets, load_adopters):
         #Arrange
         pet_id = 1
+        # todo: If our objective is populating only one pet and having specific attributes for it,
+        #  then it is much better to directly use PetModelFactory instead of fixtures
         Pet.objects.filter(pet_id=pet_id).update(status=PetStatus.ADOPTED.value)
         body = {'pet_id': pet_id}
         path_params = {}

@@ -20,6 +20,7 @@ class TestCase01CreateAdoptionRequestAPITestCase(TestUtils):
         path_params = {}
         query_params = {}
         headers = {}
+        # todo: check the snapshot, this test case is not valid
 
         #Act
         response = self.make_api_call(body=body,

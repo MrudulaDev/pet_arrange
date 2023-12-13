@@ -15,6 +15,7 @@ class TestCreateAdoptionRequest:
         create_request_dto_factory = CreateAdoptionRequestDTOFactory()
         adopter = AdopterFactory(user_id="user1")
         adopter_id = adopter.id
+        # todo: this doesn't work as expected, this will generate current datetime always
         now = datetime.now()
         adoption_request_dto = AdoptionRequestDTOFactory(adopter_id=adopter_id, requested_at=now)
 

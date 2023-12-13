@@ -7,10 +7,11 @@ from pets_core.tests.factories.storage_dtos import CreateAdoptionRequestDTOFacto
 from pets_core.exceptions.custom_exceptions import InvalidPetId, PetAlreadyAdopted, AdoptionRequestAlreadyRaised, \
     UserIsNotAdopter
 
-
 class TestCreateAdoptionRequestInteractor:
     @pytest.fixture()
     def mock_data(self):
+        # todo: this approach is also valid, but we use a different way in our project,
+        #  we shall discuss later on this
         storage = create_autospec(StorageInterface)
         interactor = CreateAdoptionRequestInteractor(storage=storage)
         mock_data = (storage, interactor)
@@ -28,6 +29,7 @@ class TestCreateAdoptionRequestInteractor:
 
         # Assert
         assert err.value.pet_id == pet_id
+        # todo: assert with kwargs, same review point for all remaining tests
         storage.validate_pet_id.assert_called_once_with(pet_id)
 
     def test_with_already_adopted_pet(self, mock_data):
