@@ -10,6 +10,7 @@ class PetDetailsDTOFactory(factory.Factory):
     class Meta:
         model = PetDetailsDTO
 
+    # todo: we should always use factory for details like ids, names
     pet_id = 1
     name = "husky"
     age = 1

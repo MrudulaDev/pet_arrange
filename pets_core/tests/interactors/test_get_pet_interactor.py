@@ -19,6 +19,7 @@ class TestGetPetInteractor:
     def test_with_invalid_pet_id(self, mock_data):
         # Arrange
         mock = mock_data
+        # todo: use kwargs in instantiation
         mock["storage"].validate_pet_id.side_effect = InvalidPetId(2)
         pet_id = 2
         # Act
