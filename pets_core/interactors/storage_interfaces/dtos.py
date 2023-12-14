@@ -46,7 +46,7 @@ class AdoptionRequestDTO:
     request_status: RequestStatus
     pet_id: int
     adopter_id: int
-    requested_at: datetime
+    requested_at: str
 
 
 @dataclass

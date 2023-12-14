@@ -82,10 +82,6 @@ class StorageInterface:
         pass
 
     @abstractmethod
-    def validate_adoption_request_access(self, request_id: int, user_id: str) -> None:
-        pass
-
-    @abstractmethod
     def get_adoption_request(self, get_adoption_request_dto: GetAdoptionRequestDTO) -> AdoptionRequestDTO:
         pass
 

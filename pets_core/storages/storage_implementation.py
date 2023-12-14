@@ -144,16 +144,6 @@ class StorageImplementation(StorageInterface, ABC):
         if not Request.objects.filter(request_id=request_id).exists():
             raise AdoptionRequestNotFound(request_id=request_id)
 
-    def validate_adoption_request_access(self, request_id: int, user_id: str):
-        # todo: This logic is more suited in interactor or a mixin,
-        #  because we are handling with multiple tables here and some conditions
-        request = Request.objects.get(request_id=request_id)
-        pet = request.requested_pet
-        adopter = request.requested_by
-        requested_pet_shelter_user_id = pet.shelter.user_id
-        requested_pet_adopter_user_id = adopter.user_id
-        if user_id not in [requested_pet_shelter_user_id, requested_pet_adopter_user_id]:
-            raise AdoptionRequestAccessDenied(user_id=user_id)
 
     def get_adoption_request(self, get_adoption_request_dto: GetAdoptionRequestDTO) -> AdoptionRequestDTO:
         request = Request.objects.get(request_id=get_adoption_request_dto.request_id)
