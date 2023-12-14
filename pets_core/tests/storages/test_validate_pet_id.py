@@ -13,7 +13,6 @@ class TestValidatePetId:
         # Act
         storage.validate_pet_id(pet_id=pet_id)
 
-
     @pytest.mark.django_db
     def test_with_invalid_pet_id(self, create_shelters_and_pets):
         # Arrange

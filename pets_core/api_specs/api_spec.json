@@ -691,7 +691,7 @@
                         "type":"string",
                         "enum":[
                            "PET_ALREADY_ADOPTED",
-                           "PET_NOT_FOUND",
+                           "INVALID_PET_ID",
                            "ADOPTION_REQUEST_ALREADY_RAISED",
                            "USER_IS_NOT_ADOPTER"
                         ]
@@ -856,7 +856,7 @@
                     "res_status":{
                      "type":"string",
                      "enum":[
-                        "REQUEST_NOT_FOUND",
+                        "ADOPTION_REQUEST_NOT_FOUND",
                         "ADOPTION_REQUEST_ACCESS_DENIED",
                         "ADOPTION_REQUEST_ALREADY_APPROVED",
                         "ADOPTION_REQUEST_CLOSED"

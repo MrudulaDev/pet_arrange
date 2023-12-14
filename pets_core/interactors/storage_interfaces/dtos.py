@@ -65,5 +65,5 @@ class ApproveAdoptionRequestDTO:
 class GetAdoptionRequestsListDTO:
     user_id: str
     shelter_id: int
-    pet_name: str
-    pet_category: PetCategory
+    name: Optional[str]
+    pet_category: Optional[PetCategory]

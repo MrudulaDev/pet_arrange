@@ -1,7 +1,8 @@
 import factory
 from datetime import datetime
 from pets_core.interactors.storage_interfaces.dtos import UpdatePetDetailsDTO, PetDetailsDTO, GetPetsFilterParamsDTO, \
-    CreateAdoptionRequestDTO, AdoptionRequestDTO, GetAdoptionRequestDTO
+    CreateAdoptionRequestDTO, AdoptionRequestDTO, GetAdoptionRequestDTO, ApproveAdoptionRequestDTO, \
+    GetAdoptionRequestsListDTO
 from pets_core.constants.enums import PetCategory, PetSize, PetGender, PetStatus, RequestStatus
 from pets_core.models.adopter import Adopter
 
@@ -59,7 +60,7 @@ class AdoptionRequestDTOFactory(factory.Factory):
     request_status = RequestStatus.OPEN.value
     pet_id = 1
     adopter_id = 1
-    requested_at = datetime.now()
+    requested_at = str(datetime.now())
 
 
 class GetAdoptionRequestDTOFactory(factory.Factory):
@@ -68,3 +69,21 @@ class GetAdoptionRequestDTOFactory(factory.Factory):
 
     user_id = "string"
     request_id = 1
+
+
+class ApproveAdoptionRequestDTOFactory(factory.Factory):
+    class Meta:
+        model = ApproveAdoptionRequestDTO
+
+    user_id = "string"
+    request_id = 1
+
+
+class GetAdoptionRequestsListDTOFactory(factory.Factory):
+    class Meta:
+        model = GetAdoptionRequestsListDTO
+
+    user_id = "string"
+    shelter_id = 1
+    name = "doggie"
+    pet_category = PetCategory.DOG.value

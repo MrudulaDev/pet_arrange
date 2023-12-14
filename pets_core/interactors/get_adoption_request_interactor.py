@@ -1,10 +1,10 @@
 from pets_core.interactors.presenter_interfaces.get_adoption_request_presenter_interface import \
     GetAdoptionRequestPresenterInterface
 from pets_core.interactors.storage_interfaces.storage_interface import StorageInterface
+from pets_core.interactors.adoption_request_access_interactor import AdoptionRequestAccess
 from pets_core.exceptions.custom_exceptions import AdoptionRequestNotFound, AdoptionRequestAccessDenied
 from django.http import HttpResponse
 from pets_core.interactors.storage_interfaces.dtos import AdoptionRequestDTO, GetAdoptionRequestDTO
-from pets_core.models.request import Request
 
 
 class GetAdoptionRequestInteractor:
@@ -24,8 +24,9 @@ class GetAdoptionRequestInteractor:
 
     def get_adoption_request(self, get_adoption_request_dto: GetAdoptionRequestDTO) -> AdoptionRequestDTO:
         self.storage.validate_adoption_request_id(request_id=get_adoption_request_dto.request_id)
-        self.validate_adoption_request_access(request_id=get_adoption_request_dto.request_id,
-                                              user_id=get_adoption_request_dto.user_id)
+        adoption_request_access_interactor = AdoptionRequestAccess()
+        adoption_request_access_interactor.validate_adoption_request_access(
+            request_id=get_adoption_request_dto.request_id,
+            user_id=get_adoption_request_dto.user_id)
         adoption_request_dto = self.storage.get_adoption_request(get_adoption_request_dto=get_adoption_request_dto)
         return adoption_request_dto
-

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pets_core.exceptions.custom_exceptions import InvalidPetId, WrongShelterId, PetIdAlreadyExists, \
     ShelterNotFound, PetNotFoundInShelter, NameAlreadyExists, UserIsNotAdopter, AdoptionRequestAlreadyRaised, \
     PetAlreadyAdopted, AdoptionRequestNotFound, AdoptionRequestAccessDenied, AdoptionRequestClosed, \
@@ -119,6 +120,12 @@ class StorageImplementation(StorageInterface, ABC):
         except:
             raise ShelterNotFound(shelter_id=shelter_id)
 
+    def validate_if_user_is_shelter(self, shelter_id: int, user_id: str):
+        if Shelter.objects.filter(user_id=user_id).exists():
+            user_shelter_id = Shelter.objects.filter(user_id=user_id).values_list('shelter_id', flat=True).first()
+            if user_shelter_id != shelter_id:
+                raise WrongShelterId(shelter_id)
+
     def validate_if_pet_already_adopted(self, pet_id: int):
         status = Pet.objects.filter(pet_id=pet_id).values_list('status', flat=True).first()
         if status == PetStatus.ADOPTED.value:
@@ -144,52 +151,45 @@ class StorageImplementation(StorageInterface, ABC):
         if not Request.objects.filter(request_id=request_id).exists():
             raise AdoptionRequestNotFound(request_id=request_id)
 
-
     def get_adoption_request(self, get_adoption_request_dto: GetAdoptionRequestDTO) -> AdoptionRequestDTO:
         request = Request.objects.get(request_id=get_adoption_request_dto.request_id)
         adoption_request_dto = self._convert_request_object_to_dto(request=request)
         return adoption_request_dto
 
-    def validate_adoption_request_already_approved(self, request_id: int):
-        request = Request.Objects.get(request_id=request_id)
+    def validate_adoption_request_already_approved_or_closed(self, request_id: int):
+        request = Request.objects.get(request_id=request_id)
         if request.request_status is RequestStatus.APPROVED.value:
             raise AdoptionRequestAlreadyApproved(request_id=request_id)
-
-    def validate_adoption_request_closed(self, request_id: int):
-        request = Request.Objects.get(request_id=request_id)
         if request.request_status is RequestStatus.CLOSED.value:
             raise AdoptionRequestClosed(request_id=request_id)
 
     def approve_adoption_request(self, approve_adoption_request_dto: ApproveAdoptionRequestDTO) -> AdoptionRequestDTO:
-        request = Request.Objects.get(request_id=approve_adoption_request_dto.request_id)
+        request = Request.objects.get(request_id=approve_adoption_request_dto.request_id)
         request.request_status = RequestStatus.APPROVED.value
         request.save()
         pet = request.requested_pet
         pet.status = PetStatus.ADOPTED.value
         pet.save()
-        # todo: need to update `status_change_timestamp` value
+        request.status_change_timestamp = str(datetime.now())
         adoption_request_dto = self._convert_request_object_to_dto(request=request)
         return adoption_request_dto
 
     def close_all_other_adoption_requests_on_requested_pet(self, request_id: int):
         requested_pet = Request.objects.get(request_id=request_id).requested_pet
-        # todo: we are closing the approved request also here, once check the query
-        all_pet_requests = Request.Objects.filter(requested_pet=requested_pet)
-        # todo: we can use filter.update here instead of iteratively saving all objects (This is a bad storage call because database will be hit multiple times),
-        #  and we should also update `status_change_timestamp` value for all closed requests
-        for each_request in all_pet_requests:
-            if each_request.request_id is not request_id:
-                each_request.request_status = RequestStatus.CLOSED.value
-                each_request.save()
+        all_pet_requests = Request.objects.filter(requested_pet=requested_pet).update(
+            request_status=RequestStatus.CLOSED.value, status_change_timestamp=str(datetime.now()))
 
     def get_adoption_requests_list(self,
                                    get_adoption_requests_list_dto: GetAdoptionRequestsListDTO) -> List[
         AdoptionRequestDTO]:
-        # todo: unnecessary join is being done in below query
-        # todo: we are only filtering with shelter_id, what about pet_name and pet_category ?
         requests_in_shelter = Request.objects.filter(
-            requested_pet__shelter__shelter_id=get_adoption_requests_list_dto.shelter_id)
-        # todo: above results should be sorted by requested_at
+            requested_pet__shelter_id=get_adoption_requests_list_dto.shelter_id)
+        name = get_adoption_requests_list_dto.name
+        pet_category = get_adoption_requests_list_dto.pet_category
+        if name is not None:
+            requests_in_shelter = requests_in_shelter.filter(requested_pet__name=name)
+        if pet_category is not None:
+            requests_in_shelter = requests_in_shelter.filter(requested_pet__pet_category=pet_category)
         adoption_request_dtos_list = self._convert_request_objects_to_dtos_list(request_objs_list=requests_in_shelter)
         return adoption_request_dtos_list
 

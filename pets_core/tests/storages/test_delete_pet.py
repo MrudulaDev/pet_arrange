@@ -6,13 +6,13 @@ from pets_core.tests.factories.storage_dtos import PetDetailsDTOFactory
 
 class TestCreatePet:
     @pytest.mark.django_db
-    def test_with_valid_data(self, create_pet):
+    def test_with_valid_data(self, create_shelters_and_pets):
         # Arrange
         storage = StorageImplementation()
-        pet = create_pet
+        pet_id = 1
 
         # Act
-        storage.delete_pet(pet_id=pet.pet_id)
+        storage.delete_pet(pet_id=pet_id)
 
         # Assert
-        assert not Pet.objects.filter(pet_id=pet.pet_id).exists()
+        assert not Pet.objects.filter(pet_id=pet_id).exists()

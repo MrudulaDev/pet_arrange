@@ -10,8 +10,7 @@ from pets_core.interactors.storage_interfaces.dtos import GetAdoptionRequestDTO
 @validate_decorator(validator_class=ValidatorClass)
 def api_wrapper(*args, **kwargs):
     user_id = str(kwargs['user'])
-    request_data = kwargs['request_data']
-    request_id = request_data['request_id']
+    request_id = int(kwargs['request_id'])
     storage = StorageImplementation()
     presenter = PresenterImplementation()
     interactor = GetAdoptionRequestInteractor(storage=storage)

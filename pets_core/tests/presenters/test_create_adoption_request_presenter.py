@@ -18,7 +18,7 @@ class TestCreateAdoptionRequestPresenterImplementation:
 
         # Assert
         response_data = json.loads(actual_response.content)
-        snapshot.assert_match(response_data, "INVALID_PET")
+        snapshot.assert_match(response_data, "INVALID_PET_ID")
 
     def test_raise_exception_for_pet_already_adopted(self, snapshot, presenter):
         # Act

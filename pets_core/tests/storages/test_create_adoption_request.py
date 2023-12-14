@@ -27,4 +27,4 @@ class TestCreateAdoptionRequest:
         assert created_request_dto.request_status == adoption_request_dto.request_status
         assert created_request_dto.pet_id == adoption_request_dto.pet_id
         assert created_request_dto.adopter_id == adoption_request_dto.adopter_id
-        assert created_request_dto.requested_at == adoption_request_dto.requested_at
+        assert created_request_dto.requested_at == str(adoption_request_dto.requested_at)

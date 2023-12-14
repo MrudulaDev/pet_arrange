@@ -4,9 +4,10 @@
 import pytest
 from django_swagger_utils.utils.test_utils import TestUtils
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
+from pets_core.models.adopter import Adopter
 
 
-class TestCase01GetAdoptionRequestAPITestCase(TestUtils):
+class TestCase02GetAdoptionRequestAPITestCase(TestUtils):
     APP_NAME = APP_NAME
     OPERATION_NAME = OPERATION_NAME
     REQUEST_METHOD = REQUEST_METHOD
@@ -14,8 +15,9 @@ class TestCase01GetAdoptionRequestAPITestCase(TestUtils):
     SECURITY = {'oauth': {'scopes': ['superuser']}}
 
     @pytest.mark.django_db
-    def test_with_invalid_request_id(self, snapshot,load_adoption_requests, api_user):
-        request_id = 3
+    def test_with_invalid_user(self, snapshot, load_adoption_requests, api_user):
+        request_id = 0
+        Adopter.objects.filter(user_id='user1').update(user_id=str(api_user.user_id))
         body = {}
         path_params = {"request_id": request_id}
         query_params = {}

@@ -38,3 +38,9 @@ snapshots['TestCreateAdoptionRequestPresenterImplementation.test_raise_exception
     'res_status': 'ADOPTION_REQUEST_ALREADY_RAISED',
     'response': 'adoption request is already raised'
 }
+
+snapshots['TestCreateAdoptionRequestPresenterImplementation.test_raise_exception_for_invalid_pet INVALID_PET_ID'] = {
+    'http_status_code': 400,
+    'res_status': 'INVALID_PET_ID',
+    'response': 'Pet Does not exist'
+}

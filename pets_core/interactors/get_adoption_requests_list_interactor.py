@@ -22,14 +22,13 @@ class GetAdoptionRequestsListInteractor:
         except WrongShelterId:
             return presenter.raise_exception_for_wrong_shelter()
         return presenter.get_response_for_get_adoption_requests_list(
-            adoption_request_dtos_list=adoption_request_dtos_list)
+            requests_list_dto=adoption_request_dtos_list)
 
-    def get_adoption_requests_list(self, get_adoption_requests_list_dto) -> List[AdoptionRequestDTO]:
-        # todo: tying for input args
+    def get_adoption_requests_list(self, get_adoption_requests_list_dto: GetAdoptionRequestsListDTO) -> List[
+        AdoptionRequestDTO]:
         self.storage.validate_if_shelter_exists(shelter_id=get_adoption_requests_list_dto.shelter_id)
-        self.storage.validate_shelter_id_authorization_with_shelter_id(
-            shelter_id=get_adoption_requests_list_dto.shelter_id,
-            user_id=get_adoption_requests_list_dto.user_id)
+        self.storage.validate_if_user_is_shelter(shelter_id=get_adoption_requests_list_dto.shelter_id,
+                                                 user_id=get_adoption_requests_list_dto.user_id)
         adoption_request_dtos_list = self.storage.get_adoption_requests_list(
             get_adoption_requests_list_dto=get_adoption_requests_list_dto)
         return adoption_request_dtos_list

@@ -62,6 +62,10 @@ class StorageInterface:
         pass
 
     @abstractmethod
+    def validate_if_user_is_shelter(self, shelter_id: int, user_id: str) -> None:
+        pass
+
+    @abstractmethod
     def validate_if_pet_already_adopted(self, pet_id: int) -> None:
         pass
 
@@ -86,12 +90,9 @@ class StorageInterface:
         pass
 
     @abstractmethod
-    def validate_adoption_request_already_approved(self, request_id: int) -> None:
+    def validate_adoption_request_already_approved_or_closed(self, request_id: int) -> None:
         pass
 
-    @abstractmethod
-    def validate_adoption_request_closed(self, request_id: int) -> None:
-        pass
 
     @abstractmethod
     def close_all_other_adoption_requests_on_requested_pet(self, request_id: int) -> None:

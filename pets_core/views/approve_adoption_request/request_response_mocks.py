@@ -21,7 +21,7 @@ RESPONSE_400_JSON = """
 {
     "response": "string",
     "http_status_code": 1,
-    "res_status": "REQUEST_NOT_FOUND"
+    "res_status": "ADOPTION_REQUEST_NOT_FOUND"
 }
 """
 

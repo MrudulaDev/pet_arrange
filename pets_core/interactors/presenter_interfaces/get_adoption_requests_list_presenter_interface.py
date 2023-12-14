@@ -7,7 +7,7 @@ from django.http import HttpResponse
 class GetAdoptionRequestsListPresenterInterface(ABC):
 
     @abstractmethod
-    def get_response_for_get_adoption_requests_list(self, adoption_request_dtos_list: List[
+    def get_response_for_get_adoption_requests_list(self, requests_list_dto: List[
         AdoptionRequestDTO]) -> HttpResponse:
         pass
 

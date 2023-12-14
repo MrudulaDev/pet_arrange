@@ -7,6 +7,7 @@ from pets_core.tests.factories.storage_dtos import CreateAdoptionRequestDTOFacto
 from pets_core.exceptions.custom_exceptions import InvalidPetId, PetAlreadyAdopted, AdoptionRequestAlreadyRaised, \
     UserIsNotAdopter
 
+
 class TestCreateAdoptionRequestInteractor:
     @pytest.fixture()
     def mock_data(self):
@@ -29,8 +30,7 @@ class TestCreateAdoptionRequestInteractor:
 
         # Assert
         assert err.value.pet_id == pet_id
-        # todo: assert with kwargs, same review point for all remaining tests
-        storage.validate_pet_id.assert_called_once_with(pet_id)
+        storage.validate_pet_id.assert_called_once_with(pet_id=pet_id)
 
     def test_with_already_adopted_pet(self, mock_data):
         # Arrange
@@ -45,7 +45,7 @@ class TestCreateAdoptionRequestInteractor:
         # Assert
         assert err.value.pet_id == pet_id
         storage.validate_pet_id.assert_called_once_with(pet_id)
-        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id)
+        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id=pet_id)
 
     def test_with_user_that_is_not_an_adopter(self, mock_data):
         # Arrange
@@ -60,9 +60,9 @@ class TestCreateAdoptionRequestInteractor:
 
         # Assert
         assert err.value.user_id == user_id
-        storage.validate_pet_id.assert_called_once_with(pet_id)
-        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id)
-        storage.validate_if_user_is_adopter.assert_called_once_with(user_id)
+        storage.validate_pet_id.assert_called_once_with(pet_id=pet_id)
+        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id=pet_id)
+        storage.validate_if_user_is_adopter.assert_called_once_with(user_id=user_id)
 
     def test_with_duplicate_request(self, mock_data):
         # Arrange
@@ -80,11 +80,11 @@ class TestCreateAdoptionRequestInteractor:
 
         # Assert
         assert err.value.request_id == request_id
-        storage.validate_pet_id.assert_called_once_with(pet_id)
-        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id)
-        storage.validate_if_user_is_adopter.assert_called_once_with(user_id)
-        storage.get_adopter_id.assert_called_once_with(user_id)
-        storage.validate_if_request_already_raised.assert_called_once_with(pet_id, adopter_id)
+        storage.validate_pet_id.assert_called_once_with(pet_id=pet_id)
+        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id=pet_id)
+        storage.validate_if_user_is_adopter.assert_called_once_with(user_id=user_id)
+        storage.get_adopter_id.assert_called_once_with(user_id=user_id)
+        storage.validate_if_request_already_raised.assert_called_once_with(pet_id=pet_id, adopter_id=adopter_id)
 
     def test_with_valid_data(self, mock_data):
         # Arrange
@@ -103,10 +103,10 @@ class TestCreateAdoptionRequestInteractor:
 
         # Assert
         assert request_dto_factory == created_request_dto
-        storage.validate_pet_id.assert_called_once_with(pet_id)
-        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id)
-        storage.validate_if_user_is_adopter.assert_called_once_with(user_id)
-        storage.get_adopter_id.assert_called_once_with(user_id)
-        storage.validate_if_request_already_raised.assert_called_once_with(pet_id, adopter_id)
-        storage.create_adoption_request.assert_called_once_with(create_request_dto_factory, adopter_id)
-
+        storage.validate_pet_id.assert_called_once_with(pet_id=pet_id)
+        storage.validate_if_pet_already_adopted.assert_called_once_with(pet_id=pet_id)
+        storage.validate_if_user_is_adopter.assert_called_once_with(user_id=user_id)
+        storage.get_adopter_id.assert_called_once_with(user_id=user_id)
+        storage.validate_if_request_already_raised.assert_called_once_with(pet_id=pet_id, adopter_id=adopter_id)
+        storage.create_adoption_request.assert_called_once_with(create_adoption_request_dto=create_request_dto_factory,
+                                                                adopter_id=adopter_id)

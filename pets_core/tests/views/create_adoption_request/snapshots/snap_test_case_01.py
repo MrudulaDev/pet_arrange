@@ -7,10 +7,10 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['TestCase01CreateAdoptionRequestAPITestCase.test_with_invalid_pet_id status_code'] = '500'
+snapshots['TestCase01CreateAdoptionRequestAPITestCase.test_with_invalid_pet_id status_code'] = '400'
 
 snapshots['TestCase01CreateAdoptionRequestAPITestCase.test_with_invalid_pet_id body'] = {
-    'res_status': [
-        '"INVALID_PET_ID" is not a valid choice.'
-    ]
+    'http_status_code': 400,
+    'res_status': 'INVALID_PET_ID',
+    'response': 'Pet Does not exist'
 }

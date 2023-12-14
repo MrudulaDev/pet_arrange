@@ -21,7 +21,7 @@ def api_wrapper(*args, **kwargs):
     get_adoption_requests_list_dto = GetAdoptionRequestsListDTO(
         user_id=user_id,
         shelter_id=shelter_id,
-        pet_name=pet_name,
+        name=pet_name,
         pet_category=pet_category
     )
     result = interactor.get_adoption_requests_list_wrapper(

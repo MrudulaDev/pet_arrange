@@ -14,9 +14,9 @@ class TestCase01GetFilteredAdoptionRequestsListAPITestCase(TestUtils):
     SECURITY = {'oauth': {'scopes': ['superuser']}}
 
     @pytest.mark.django_db
-    def test_case(self, snapshot):
+    def test_with_invalid_shelter_id(self, snapshot, create_shelters_and_pets):
         body = {}
-        path_params = {"shelter_id": "1234"}
+        path_params = {"shelter_id": 4}
         query_params = {'name': 'string', 'pet_category': 'DOG'}
         headers = {}
         response = self.make_api_call(body=body,
