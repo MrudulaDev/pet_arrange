@@ -38,6 +38,6 @@ class ApproveAdoptionRequestInteractor:
             request_id=approve_adoption_request_dto.request_id)
         adoption_request_dto = self.storage.approve_adoption_request(
             approve_adoption_request_dto=approve_adoption_request_dto)
-        self.storage.close_all_other_adoption_requests_on_requested_pet(
+        self.storage.close_all_adoption_requests_on_requested_pet(
             request_id=approve_adoption_request_dto.request_id)
         return adoption_request_dto

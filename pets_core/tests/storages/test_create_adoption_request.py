@@ -6,9 +6,9 @@ from pets_core.tests.factories.storage_dtos import CreateAdoptionRequestDTOFacto
 from pets_core.tests.factories.models import AdopterFactory
 
 
+@freeze_time(str(datetime.now()))
 class TestCreateAdoptionRequest:
     @pytest.mark.django_db
-    @freeze_time(str(datetime.now()))
     def test_create_request(self, create_shelters_and_pets):
         # Arrange
         storage = StorageImplementation()

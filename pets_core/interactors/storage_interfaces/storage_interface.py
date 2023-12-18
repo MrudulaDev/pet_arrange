@@ -95,7 +95,7 @@ class StorageInterface:
 
 
     @abstractmethod
-    def close_all_other_adoption_requests_on_requested_pet(self, request_id: int) -> None:
+    def close_all_adoption_requests_on_requested_pet(self, request_id: int) -> List:
         pass
 
     @abstractmethod

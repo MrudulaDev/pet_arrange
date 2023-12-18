@@ -1,4 +1,5 @@
 import pytest, factory
+from django.db import transaction
 from pets_core.models.pet import Pet
 from pets_core.models.shelter import Shelter
 from pets_core.models.adopter import Adopter
@@ -130,9 +131,10 @@ def load_adopters():
 
 @pytest.fixture()
 def load_adoption_requests(create_shelters_and_pets, load_adopters):
-    pet = Pet.objects.get(pet_id=1)
-    adopter1 = Adopter.objects.get(user_id='user1')
-    adopter2 = Adopter.objects.get(user_id='user2')
-    request1 = RequestFactory(requested_by=adopter1, requested_pet=pet)
-    request2 = RequestFactory(requested_by=adopter2, requested_pet=pet)
-    return [request1, request2]
+    with transaction.atomic():
+        pet = Pet.objects.get(pet_id=1)
+        adopter1 = Adopter.objects.get(user_id='user1')
+        adopter2 = Adopter.objects.get(user_id='user2')
+        request1 = RequestFactory(requested_by=adopter1, requested_pet=pet)
+        request2 = RequestFactory(requested_by=adopter2, requested_pet=pet)
+        return [request1, request2]

@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.db.models import Q
 from pets_core.exceptions.custom_exceptions import InvalidPetId, WrongShelterId, PetIdAlreadyExists, \
     ShelterNotFound, PetNotFoundInShelter, NameAlreadyExists, UserIsNotAdopter, AdoptionRequestAlreadyRaised, \
     PetAlreadyAdopted, AdoptionRequestNotFound, AdoptionRequestAccessDenied, AdoptionRequestClosed, \
@@ -121,10 +122,11 @@ class StorageImplementation(StorageInterface, ABC):
             raise ShelterNotFound(shelter_id=shelter_id)
 
     def validate_if_user_is_shelter(self, shelter_id: int, user_id: str):
+        user_shelter_id = ""
         if Shelter.objects.filter(user_id=user_id).exists():
             user_shelter_id = Shelter.objects.filter(user_id=user_id).values_list('shelter_id', flat=True).first()
-            if user_shelter_id != shelter_id:
-                raise WrongShelterId(shelter_id)
+        if user_shelter_id != shelter_id:
+            raise WrongShelterId(shelter_id)
 
     def validate_if_pet_already_adopted(self, pet_id: int):
         status = Pet.objects.filter(pet_id=pet_id).values_list('status', flat=True).first()
@@ -158,9 +160,9 @@ class StorageImplementation(StorageInterface, ABC):
 
     def validate_adoption_request_already_approved_or_closed(self, request_id: int):
         request = Request.objects.get(request_id=request_id)
-        if request.request_status is RequestStatus.APPROVED.value:
+        if request.request_status == RequestStatus.APPROVED.value:
             raise AdoptionRequestAlreadyApproved(request_id=request_id)
-        if request.request_status is RequestStatus.CLOSED.value:
+        if request.request_status == RequestStatus.CLOSED.value:
             raise AdoptionRequestClosed(request_id=request_id)
 
     def approve_adoption_request(self, approve_adoption_request_dto: ApproveAdoptionRequestDTO) -> AdoptionRequestDTO:
@@ -174,22 +176,24 @@ class StorageImplementation(StorageInterface, ABC):
         adoption_request_dto = self._convert_request_object_to_dto(request=request)
         return adoption_request_dto
 
-    def close_all_other_adoption_requests_on_requested_pet(self, request_id: int):
+    def close_all_adoption_requests_on_requested_pet(self, request_id: int):
         requested_pet = Request.objects.get(request_id=request_id).requested_pet
-        all_pet_requests = Request.objects.filter(requested_pet=requested_pet).update(
+        Request.objects.filter(requested_pet=requested_pet).exclude(request_id=request_id).update(
             request_status=RequestStatus.CLOSED.value, status_change_timestamp=str(datetime.now()))
+        Request.objects.all()
 
     def get_adoption_requests_list(self,
                                    get_adoption_requests_list_dto: GetAdoptionRequestsListDTO) -> List[
         AdoptionRequestDTO]:
-        requests_in_shelter = Request.objects.filter(
-            requested_pet__shelter_id=get_adoption_requests_list_dto.shelter_id)
+        shelter_id = get_adoption_requests_list_dto.shelter_id
         name = get_adoption_requests_list_dto.name
         pet_category = get_adoption_requests_list_dto.pet_category
+        q_filter = Q(requested_pet__shelter=shelter_id)
         if name is not None:
-            requests_in_shelter = requests_in_shelter.filter(requested_pet__name=name)
+            q_filter &= Q(requested_pet__name=name)
         if pet_category is not None:
-            requests_in_shelter = requests_in_shelter.filter(requested_pet__pet_category=pet_category)
+            q_filter &= Q(requested_pet__pet_category=pet_category)
+        requests_in_shelter = Request.objects.filter(q_filter)
         adoption_request_dtos_list = self._convert_request_objects_to_dtos_list(request_objs_list=requests_in_shelter)
         return adoption_request_dtos_list
 
@@ -242,9 +246,9 @@ class StorageImplementation(StorageInterface, ABC):
             request_dto = AdoptionRequestDTO(
                 request_id=request.request_id,
                 request_status=request.request_status,
-                pet_id=request.requested_pet,
-                adopter_id=request.requested_by,
-                requested_at=request.requested_at
+                pet_id=request.requested_pet_id,
+                adopter_id=request.requested_by_id,
+                requested_at=str(request.requested_at)
             )
             request_dtos_list += [request_dto]
         return request_dtos_list

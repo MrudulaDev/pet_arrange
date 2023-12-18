@@ -1,5 +1,6 @@
-import factory
 from datetime import datetime
+
+import factory
 
 from pets_core.constants.enums import PetCategory, PetSize, PetGender, PetStatus, RequestStatus
 from pets_core.models.pet import Pet
@@ -50,7 +51,7 @@ class RequestFactory(factory.django.DjangoModelFactory):
     request_status = RequestStatus.OPEN.value
     requested_by = factory.SubFactory(AdopterFactory)
     requested_pet = factory.SubFactory(PetFactory)
-    requested_at = datetime.now()
+    requested_at = str(datetime.now())
     status_change_timestamp = None
 
 

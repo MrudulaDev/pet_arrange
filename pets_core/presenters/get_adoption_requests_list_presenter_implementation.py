@@ -12,7 +12,7 @@ class PresenterImplementation(GetAdoptionRequestsListPresenterInterface, HTTPRes
 
     def get_response_for_get_adoption_requests_list(self, requests_list_dto: List[AdoptionRequestDTO]) -> HttpResponse:
         adoption_requests_dict_list = self._get_request_details(requests_list_dto)
-        return self.prepare_200_success_response(response_dict={"adoption_requests_list": adoption_requests_dict_list})
+        return self.prepare_200_success_response(response_dict={"adoption_requests": adoption_requests_dict_list})
 
     @staticmethod
     def _get_request_details(requests_list_dto: List[AdoptionRequestDTO]) -> List[Dict]:

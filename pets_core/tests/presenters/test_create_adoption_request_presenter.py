@@ -1,6 +1,6 @@
 import pytest
 import json
-from freezegun import freeze_time
+
 from datetime import datetime
 from pets_core.presenters.create_adoption_request_presenter_implementation import PresenterImplementation
 from pets_core.tests.factories.storage_dtos import AdoptionRequestDTOFactory

@@ -14,5 +14,5 @@ snapshots['TestCase05ApproveAdoptionRequestAPITestCase.test_with_valid_data body
     'pet_id': 1,
     'request_id': 1,
     'request_status': 'APPROVED',
-    'requested_at': '2023-12-14 18:35:03.179782'
+    'requested_at': '2023-12-16 10:17:49.891677'
 }

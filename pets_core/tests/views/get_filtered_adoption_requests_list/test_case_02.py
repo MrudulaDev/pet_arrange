@@ -4,6 +4,7 @@
 import pytest
 from django_swagger_utils.utils.test_utils import TestUtils
 from . import APP_NAME, OPERATION_NAME, REQUEST_METHOD, URL_SUFFIX
+from pets_core.models.shelter import Shelter
 
 
 class TestCase02GetFilteredAdoptionRequestsListAPITestCase(TestUtils):
@@ -14,10 +15,11 @@ class TestCase02GetFilteredAdoptionRequestsListAPITestCase(TestUtils):
     SECURITY = {'oauth': {'scopes': ['superuser']}}
 
     @pytest.mark.django_db
-    def test_with_wrong_shelter_id(self, snapshot, create_shelters_and_pets):
+    def test_with_wrong_shelter_id(self, snapshot, create_shelters_and_pets, api_user):
+        Shelter.objects.filter(shelter_id=2).update(user_id=api_user.user_id)
         body = {}
         path_params = {"shelter_id": 1}
-        query_params = {'name': None , 'pet_category': 'DOG'}
+        query_params = {'name': None, 'pet_category': 'DOG'}
         headers = {}
         response = self.make_api_call(body=body,
                                       path_params=path_params,

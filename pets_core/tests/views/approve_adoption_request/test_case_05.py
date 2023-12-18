@@ -15,8 +15,9 @@ class TestCase05ApproveAdoptionRequestAPITestCase(TestUtils):
     REQUEST_METHOD = REQUEST_METHOD
     URL_SUFFIX = URL_SUFFIX
     SECURITY = {'oauth': {'scopes': ['superuser']}}
-    @freeze_time("2023-03-15 12:30:00")
+
     @pytest.mark.django_db
+    @freeze_time("2023-03-15 12:30:00")
     def test_with_valid_data(self, snapshot, load_adoption_requests, api_user):
         Shelter.objects.filter(shelter_id=1).update(user_id=str(api_user.user_id))
         body = {'request_id': 1}
